@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -33,12 +34,22 @@ export class LoginComponent {
   }
 
   loginWithGoogle() {
-    window.alert('Funcionalidad de login con Google aún no disponible.');
+    Swal.fire({
+          icon: 'info',
+          title: 'Login con Google',
+          text: 'Funcionalidad de login con Google aún no disponible.',
+          confirmButtonText: 'Entendido'
+        });
     //this.authService.loginWithGoogle();
   }
 
   loginWithFacebook() {
-    window.alert('Funcionalidad de login con Facebook aún no disponible.');
+    Swal.fire({
+          icon: 'info',
+          title: 'Login con Facebook',
+          text: 'Funcionalidad de login con Facebook aún no disponible.',
+          confirmButtonText: 'Vale'
+        });
     //this.authService.loginWithFacebook();
   }
 }
