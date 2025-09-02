@@ -17,3 +17,11 @@ button i {
   color: #6c757d;
   border-top: 1px solid #ddd;
 }
+
+a.text-primary {
+  cursor: pointer;
+}
+
+a.text-primary:hover {
+  text-decoration: underline;
+}
