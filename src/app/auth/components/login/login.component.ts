@@ -46,4 +46,13 @@ export class LoginComponent {
       confirmButtonText: 'Vale'
     });
   }
+
+  loginWithEmail() {
+    Swal.fire({
+      icon: 'info',
+      title: 'Login con Email',
+      text: 'Funcionalidad de login con Email aún no disponible.',
+      confirmButtonText: 'De acuerdo'
+    });
+  }
 }

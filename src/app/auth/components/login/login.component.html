@@ -5,7 +5,7 @@
     <label for="email" class="form-label">
       <i class="bi bi-envelope-fill me-1"></i> Correo electrónico
     </label>
-    <input id="email" class="form-control" formControlName="email" type="email" required />
+    <input id="email" class="form-control" formControlName="email" type="email" required placeholder="ejemplo@correo.com" />
     <div class="text-danger mt-1 small" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
       Correo inválido
     </div>
@@ -15,13 +15,13 @@
     <label for="password" class="form-label">
       <i class="bi bi-lock-fill me-1"></i> Contraseña
     </label>
-    <input id="password" class="form-control" formControlName="password" type="password" required />
+    <input id="password" class="form-control" formControlName="password" type="password" required placeholder="Contraseña"/>
     <div class="text-danger mt-1 small" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
       Contraseña requerida
     </div>
   </div>
 
-  <button type="submit" class="btn btn-primary w-100" [disabled]="loading">
+  <button type="submit" class="btn btn-primary w-100" [disabled]="loading" (click)="loginWithEmail()">
     <i class="bi bi-box-arrow-in-right me-1"></i> Ingresar
   </button>
 
