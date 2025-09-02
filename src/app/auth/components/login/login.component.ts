@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../../services/auth.service'; // Corrige la ruta
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -24,17 +26,19 @@ export class LoginComponent {
     this.loading = true;
     this.error = null;
     const { email, password } = this.loginForm.value;
-    this.authService.login(email, password).subscribe({
-      next: () => { this.loading = false; /* redirigir */ },
+    /* this.authService.login(email, password).subscribe({
+      next: () => { this.loading = false;  *//* redirigir *//*  },
       error: (err: any) => { this.error = err; this.loading = false; }
-    });
+    }); */
   }
 
   loginWithGoogle() {
-    this.authService.loginWithGoogle();
+    window.alert('Funcionalidad de login con Google aún no disponible.');
+    //this.authService.loginWithGoogle();
   }
 
   loginWithFacebook() {
-    this.authService.loginWithFacebook();
+    window.alert('Funcionalidad de login con Facebook aún no disponible.');
+    //this.authService.loginWithFacebook();
   }
 }
