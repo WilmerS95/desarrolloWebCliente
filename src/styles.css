@@ -1,1 +1,28 @@
 /* You can add global styles to this file, and also import other style files */
+a.text-primary {
+  cursor: pointer;
+}
+
+a.text-primary:hover {
+  text-decoration: underline;
+}
+
+.app-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #f8f9fa;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 14px;
+  color: #6c757d;
+  border-top: 1px solid #ddd;
+}
+
+.card {
+  border-radius: 1rem;
+}
+button i {
+  vertical-align: middle;
+}

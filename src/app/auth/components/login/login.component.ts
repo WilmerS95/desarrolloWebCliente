@@ -15,7 +15,6 @@ export class LoginComponent {
   loginForm: FormGroup;
   loading = false;
   error: string | null = null;
-  currentYear = new Date().getFullYear();
 
   constructor(private fb: FormBuilder/*, private authService: AuthService*/) {
     this.loginForm = this.fb.group({
