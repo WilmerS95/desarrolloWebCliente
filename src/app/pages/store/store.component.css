@@ -1,0 +1,37 @@
+.store-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #004085;
+  color: #fff;
+  padding: 15px 20px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo img {
+  width: 40px;
+  height: 40px;
+}
+
+.nav-links button {
+  margin-left: 10px;
+  padding: 8px 15px;
+  background: #ffc107;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.nav-links button:hover {
+  background: #e0a800;
+}
+
+.store-content {
+  padding: 20px;
+}

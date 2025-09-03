@@ -1,9 +1,12 @@
 <router-outlet></router-outlet>
 
 <footer class="app-footer">
-  <p>
-    © {{ currentYear }} 036 - Desarrollo Web |
-    <a href="/privacy">Política de Privacidad</a> |
-    <a href="/terms">Términos y Condiciones</a>
-  </p>
+  <div class="footer-content">
+    <img src="/empeños.png" alt="Logo del negocio" class="footer-logo"/>
+    <p>
+      © {{ currentYear }} 036 - Desarrollo Web |
+      <a href="#" (click)="showPrivacyPolicy($event)">Política de Privacidad</a> |
+      <a href="#" (click)="showTerms($event)">Términos y Condiciones</a>
+    </p>
+  </div>
 </footer>
