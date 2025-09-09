@@ -96,7 +96,6 @@
   object-fit: cover;
 }
 
-/* Product Info */
 .info-product {
   padding: 15px;
   display: flex;
@@ -128,7 +127,6 @@
   margin: 5px 0;
 }
 
-/* Add to Cart Button */
 .btn-add {
   padding: 8px 15px;
   background-color: #0d6efd;
