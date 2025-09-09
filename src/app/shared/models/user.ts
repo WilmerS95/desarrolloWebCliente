@@ -6,7 +6,7 @@ export interface User {
   secondOrMoreNames?: string;
   firstLastName: string;
   secondLastName?: string;
-  marriedName?: string;
+  marriedLastName?: string;
   email: string;
   telephone?: string;
   address?: string;
