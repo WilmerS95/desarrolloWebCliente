@@ -11,22 +11,50 @@
 </header>
 
 <main class="store-content">
+  <!-- Filtros -->
+  <section class="filters">
+    <input
+      type="text"
+      placeholder="Buscar productos..."
+      [(ngModel)]="searchTerm"
+      (input)="applyFilters()"
+    />
+
+    <select [(ngModel)]="selectedCategory" (change)="applyFilters()">
+      <option value="all">Todas las categorías</option>
+      <option *ngFor="let cat of categories" [value]="cat.categoryId">
+        {{ cat.categoryName }}
+      </option>
+    </select>
+  </section>
+
+  <!-- Catálogo -->
   <section class="catalog">
     <h2>Catálogo de artículos</h2>
 
     <div class="products-container">
-      <div class="product-card" *ngFor="let item of items">
-        <div class="product-image">
-          <img [src]="item.photos" [alt]="item.nameItem" />
-        </div>
+      <div class="product-card" *ngFor="let item of filteredItems">
+        <img [src]="item.photos" [alt]="item.nameItem" />
         <div class="info-product">
           <h3>{{ item.nameItem }}</h3>
           <p class="brand">{{ item.brand }}</p>
           <p class="description">{{ item.description }}</p>
-          <p class="price">{{ formatCurrency(item.price) }}</p>
-          <button class="btn-add" (click)="addToCart(item)">Agregar al carrito</button>
+          <p class="price">{{ formatCurrency(item.price || 0) }}</p>
+          <button class="btn-add" (click)="addToCart(item)">
+            Agregar al carrito
+          </button>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- Comentarios -->
+  <section class="comments">
+    <h2>Comentarios de clientes</h2>
+    <div class="comment" *ngFor="let comment of comments">
+      <h4>{{ comment.user }}</h4>
+      <p>{{ comment.message }}</p>
+      <small>⭐ {{ comment.rating }}/5</small>
     </div>
   </section>
 </main>

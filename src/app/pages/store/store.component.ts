@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Item } from '../../shared/models/item';
 import { Category } from '../../shared/models/category';
@@ -9,17 +9,22 @@ import { Category } from '../../shared/models/category';
 @Component({
   selector: 'app-store',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, FormsModule],
   templateUrl: './store.component.html',
-  styleUrl: './store.component.css'
+  styleUrls: ['./store.component.css']
 })
 export class StoreComponent {
   currentYear = new Date().getFullYear();
 
-  // Categorías de prueba
+  searchTerm: string = '';
+  selectedCategory: string | number = 'all';
+  filteredItems: Item[] = [];
+
   categories: Category[] = [
     { categoryId: 1, categoryName: 'Electrónica', description: 'Dispositivos electrónicos' },
-    { categoryId: 2, categoryName: 'Joyería', description: 'Collares, anillos y más' }
+    { categoryId: 2, categoryName: 'Joyería', description: 'Collares, anillos y más' },
+    { categoryId: 3, categoryName: 'Vehículos', description: 'Carros, motos y más' },
+    { categoryId: 4, categoryName: 'Otros', description: 'Otros no descritos' }
   ];
 
 items: Item[] = [
@@ -28,10 +33,25 @@ items: Item[] = [
     { itemID: 3, categoryId: 2, nameItem: 'Pulsera', brand: 'Pandora', photos: '/assets/products/Laptop.jpg', description: 'Pulsera elegante', price: 800 },
     { itemID: 4, categoryId: 2, nameItem: 'Collar', brand: 'Swarovski', photos: '/assets/products/Laptop.jpg', description: 'Collar de lujo', price: 1200 },
     { itemID: 5, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/Laptop.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
+    { itemID: 5, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/Laptop.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
+    { itemID: 5, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/Laptop.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
+    { itemID: 5, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/Laptop.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
+    { itemID: 5, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/Laptop.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
+    { itemID: 5, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/Laptop.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
+    { itemID: 5, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/Laptop.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
+    { itemID: 5, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/Laptop.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
+    { itemID: 5, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/Laptop.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
     { itemID: 6, categoryId: 2, nameItem: 'Anillo', brand: 'Cartier', photos: '/assets/products/Laptop.jpg', description: 'Anillo de oro', price: 4000 }
   ];
 
-  constructor(private router: Router) {}
+  comments = [
+    { user: 'Carlos López', message: 'Excelente atención y productos en muy buen estado.', rating: 5 },
+    { user: 'María Pérez', message: 'El envío fue rápido y el producto tal como se describe.', rating: 4 },
+    { user: 'Juan Rodríguez', message: 'Me encantó la variedad de artículos.', rating: 5 }
+  ];
+
+  constructor(private router: Router) {
+    this.filteredItems = this.items;}
 
   /* isLoggedIn(): boolean {
     return !!localStorage.getItem('auth_token');
@@ -67,7 +87,7 @@ items: Item[] = [
   }
 
   formatCurrency(amount?: number): string {
-    if (amount == null) return ''; // si es undefined o null
+    if (amount == null) return '';
     return new Intl.NumberFormat('es-GT', {
       style: 'currency',
       currency: 'GTQ',
@@ -76,5 +96,19 @@ items: Item[] = [
     })
     .format(amount)
     .replace('GTQ', 'Q.');
+  }
+
+  applyFilters() {
+    this.filteredItems = this.items.filter(item => {
+      const matchesSearch = this.searchTerm
+        ? item.nameItem.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+          item.brand?.toLowerCase().includes(this.searchTerm.toLowerCase())
+        : true;
+
+      const matchesCategory =
+        this.selectedCategory === 'all' || item.categoryId === Number(this.selectedCategory);
+
+      return matchesSearch && matchesCategory;
+    });
   }
 }
