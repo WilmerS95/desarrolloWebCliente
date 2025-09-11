@@ -1,0 +1,80 @@
+<div class="form-container">
+  <h2>Formulario de Solicitud de Préstamo</h2>
+
+  <form (ngSubmit)="onSubmit()" #prestamoForm="ngForm">
+
+    <!-- DATOS DEL SOLICITANTE -->
+    <fieldset>
+      <legend>Datos del Solicitante</legend>
+      <label>Nombre completo:</label>
+      <input type="text" [(ngModel)]="nombreCompleto" name="nombreCompleto" required>
+
+      <label>DPI / Identificación:</label>
+      <input type="text" [(ngModel)]="dpi" name="dpi" required>
+
+      <label>Teléfono:</label>
+      <input type="tel" [(ngModel)]="telefono" name="telefono" required>
+
+      <label>Correo electrónico:</label>
+      <input type="email" [(ngModel)]="correo" name="correo" required>
+
+      <label>Dirección:</label>
+      <textarea [(ngModel)]="direccion" name="direccion"></textarea>
+    </fieldset>
+
+    <!-- DATOS DEL PRÉSTAMO -->
+    <fieldset>
+      <legend>Datos del Préstamo</legend>
+      <label>Fecha de solicitud:</label>
+      <input type="date" [(ngModel)]="applicationDate" name="applicationDate" required>
+
+      <label>Artículo a empeñar (ID):</label>
+      <input type="text" [(ngModel)]="itemID" name="itemID" required>
+
+      <label>Descripción breve:</label>
+      <textarea [(ngModel)]="descripcionArticulo" name="descripcionArticulo"></textarea>
+
+      <label>Marca / Especificación:</label>
+      <input type="text" [(ngModel)]="marca" name="marca">
+
+      <label>Cantidad de pagos:</label>
+      <input type="number" [(ngModel)]="quantityPayments" name="quantityPayments" required>
+
+      <label>Valor estimado:</label>
+      <input type="number" [(ngModel)]="valorEstimado" name="valorEstimado" required>
+    </fieldset>
+
+    <!-- DATOS DEL ARTÍCULO -->
+    <fieldset>
+      <legend>Datos del Artículo</legend>
+      <label>Nombre del artículo:</label>
+      <input type="text" [(ngModel)]="nameItem" name="nameItem" required>
+
+      <label>Categoría:</label>
+      <input type="text" [(ngModel)]="categoryId" name="categoryId">
+
+      <label>Fotos:</label>
+      <input type="file" (change)="onFileChange($event, 'fotos')" multiple>
+    </fieldset>
+
+    <!-- DATOS ADICIONALES -->
+    <fieldset>
+      <legend>Datos Adicionales</legend>
+      <label>Comentarios:</label>
+      <textarea [(ngModel)]="comentarios" name="comentarios"></textarea>
+
+      <label>Documentos adjuntos:</label>
+      <input type="file" (change)="onFileChange($event, 'documentos')" multiple>
+    </fieldset>
+
+    <!-- BOTÓN -->
+    <button type="submit">Enviar Solicitud</button>
+  </form>
+
+  <!-- MENSAJE -->
+  <div class="mensaje" *ngIf="enviado">
+    <p>✅ ¡Solicitud enviada correctamente!</p>
+  </div>
+</div>
+
+

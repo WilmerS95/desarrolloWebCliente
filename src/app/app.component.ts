@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { SolicitudPrestamoComponent } from './solicitud-prestamo/solicitud-prestamo.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  standalone: true,
+  imports: [SolicitudPrestamoComponent], // <- aquí se importa
+  template: `<app-solicitud-prestamo></app-solicitud-prestamo>`,
 })
-export class AppComponent {
-  title = 'desarrollo-web';
-}
+export class AppComponent {}
+
