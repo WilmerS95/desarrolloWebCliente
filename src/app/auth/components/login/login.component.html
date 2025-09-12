@@ -2,12 +2,12 @@
   <h2 class="text-center mb-4">Iniciar sesión</h2>
 
   <div class="mb-3">
-    <label for="email" class="form-label">
-      <i class="bi bi-envelope-fill me-1"></i> Correo electrónico
+    <label for="username" class="form-label">
+      <i class="bi bi-person-fill me-1"></i> Usuario
     </label>
-    <input id="email" class="form-control" formControlName="email" type="email" required placeholder="ejemplo@correo.com" />
-    <div class="text-danger mt-1 small" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
-      Correo inválido
+    <input id="username" class="form-control" formControlName="username" type="text" required placeholder="Tu usuario"/>
+    <div class="text-danger mt-1 small" *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+      Usuario Requerido
     </div>
   </div>
 
@@ -21,7 +21,7 @@
     </div>
   </div>
 
-  <button type="submit" class="btn btn-primary w-100" [disabled]="loading" (click)="loginWithEmail()">
+  <button type="submit" class="btn btn-primary w-100" [disabled]="loading">
     <i class="bi bi-box-arrow-in-right me-1"></i> Ingresar
   </button>
 

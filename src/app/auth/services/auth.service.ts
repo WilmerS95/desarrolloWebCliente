@@ -2,17 +2,44 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 //import { SocialAuthService, GoogleLoginProvider, FacebookLoginProvider, SocialUser } from '@abacritt/angularx-social-login';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+
+  private apiUrl = 'http://localhost:9000/auth';
+
   constructor(
     private http: HttpClient,
     //private socialAuthService: SocialAuthService
   ) {}
 
-   login(email: string, password: string): Observable<any> {
-    return this.http.post('/api/auth/login', { email, password });
+  login(username: string, password: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/login`, { username, password }).pipe(
+      tap(response => {
+        if (response.token) {
+          // Guardar token en localStorage
+          localStorage.setItem('token', response.token);
+        }
+      })
+    );
   }
+
+  logout() {
+    localStorage.removeItem('token');
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+  isAuthenticated(): boolean {
+    return !!this.getToken();
+  }
+
+   /* login(email: string, password: string): Observable<any> {
+    return this.http.post('/api/auth/login', { email, password });
+  } */
 /*
   loginWithGoogle(): Promise<SocialUser> {
     return this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
