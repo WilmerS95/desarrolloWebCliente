@@ -8,8 +8,8 @@ import { tap } from 'rxjs/operators';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
-  //private apiUrl = 'http://localhost:9000/auth';
-  private apiUrl = 'http://192.168.1.33:9000/auth';
+  private apiUrl = 'http://localhost:9000/auth';
+  //private apiUrl = 'http://192.168.1.33:9000/auth';
 
   constructor(
     private http: HttpClient,

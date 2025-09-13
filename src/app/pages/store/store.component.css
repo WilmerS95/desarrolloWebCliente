@@ -22,7 +22,7 @@
 .nav-links button {
   margin-left: 15px;
   padding: 8px 20px;
-  background: #ffc107;
+  background: #FFFFFF;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -30,7 +30,7 @@
 }
 
 .nav-links button:hover {
-  background: #e0a800;
+  background: #C8F779;
   transform: scale(1.15);
 }
 
