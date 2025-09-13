@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -13,24 +14,37 @@ import Swal from 'sweetalert2';
 export class ForgotPasswordComponent implements OnInit {
   forgotForm!: FormGroup;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.forgotForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-    });
+          email: ['', [Validators.required, Validators.email]],
+        });
   }
 
   onSubmit() {
-    if (this.forgotForm.valid) {
-      Swal.fire({
-              toast: true,
-              position: 'top-end',
-              icon: 'info',
-              title: 'Funcionalidad no disponible',
-              showConfirmButton: false,
-              timer: 3000
+      if (this.forgotForm.valid) {
+        const email = this.forgotForm.value.email;
+
+        this.authService.forgotPassword(email).subscribe({
+          next: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Correo enviado',
+              text: 'Revisa tu bandeja de entrada para restablecer tu contraseña',
             });
+          },
+          error: (err) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: err.error || 'No se pudo enviar el correo de recuperación',
+            });
+          }
+        });
+      }
     }
-  }
 }

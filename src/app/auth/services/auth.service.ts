@@ -16,6 +16,18 @@ export class AuthService {
     //private socialAuthService: SocialAuthService
   ) {}
 
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/forgot-password`, { email });
+  }
+
+  resetPassword(token: string, newPassword: string): Observable<any> {
+      const body = {
+        token: token,
+        newPassword: newPassword
+      };
+      return this.http.post(`${this.apiUrl}/reset-password`, body);
+  }
+
   register(data: RegisterRequest): Observable<any> {
     return this.http.post(`${this.apiUrl}/register`, data);
   }
