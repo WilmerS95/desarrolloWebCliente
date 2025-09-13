@@ -1,0 +1,10 @@
+:host {
+  display: block;
+  padding: 2rem;
+  padding-bottom: 6rem;
+}
+
+.form-label .required-star {
+  color: red;
+  margin-left: 0.1rem;
+}

@@ -1,24 +1,29 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 //import { SocialAuthService, GoogleLoginProvider, FacebookLoginProvider, SocialUser } from '@abacritt/angularx-social-login';
+import { RegisterRequest } from '../../shared/models/register-request';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
-  private apiUrl = 'http://localhost:9000/auth';
+  //private apiUrl = 'http://localhost:9000/auth';
+  private apiUrl = 'http://192.168.1.33:9000/auth';
 
   constructor(
     private http: HttpClient,
     //private socialAuthService: SocialAuthService
   ) {}
 
+  register(data: RegisterRequest): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register`, data);
+  }
+
   login(username: string, password: string): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/login`, { username, password }).pipe(
       tap(response => {
         if (response.token) {
-          // Guardar token en localStorage
           localStorage.setItem('token', response.token);
         }
       })
