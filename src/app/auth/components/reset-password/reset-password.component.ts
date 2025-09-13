@@ -48,8 +48,8 @@ export class ResetPasswordComponent implements OnInit {
         error: (err) => {
           console.error(err);
           const message =
-              err?.error?.message || // si tu backend envía { "message": "..." }
-              err?.error ||          // si envía texto plano
+              err?.error?.message ||
+              err?.error ||
               'No se pudo restablecer la contraseña';
 
           Swal.fire({
