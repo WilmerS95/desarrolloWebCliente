@@ -61,57 +61,6 @@ export class StoreComponent {
     return this.authService.isAuthenticated();
   }
 
-  logout() {
-    Swal.fire({
-      icon: 'warning',
-      title: 'Cerrar sesión',
-      text: '¿Estás seguro que quieres cerrar sesión?',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, cerrar sesión',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.authService.logout();
-        Swal.fire({
-          icon: 'success',
-          title: 'Sesión cerrada',
-          text: 'Has cerrado sesión correctamente',
-          timer: 2000,
-          showConfirmButton: false
-        });
-      }
-    });
-  }
-
-  goToPawn() {
-    if (this.isLoggedIn()) {
-      Swal.fire({
-        icon: 'info',
-        title: 'Ya estás logueado',
-        text: 'Puedes continuar con el flujo de empeño normalmente.',
-        confirmButtonText: 'Aceptar'
-      });
-      return;
-    }
-
-    Swal.fire({
-          icon: 'info',
-          title: 'Funcionalidad de empeño',
-          text: 'Debes iniciar sesión para empeñar un artículo',
-          confirmButtonText: 'Aceptar'
-        }).then(() => this.goToLogin());
-    //this.goToLogin()
-    /* if (this.isLoggedIn()) {
-      this.router.navigate(['/pawn']);
-    } else {
-      goToLogin()
-    } */
-  }
-
-  goToLogin() {
-    this.router.navigate(['/login']);
-  }
-
   addToCart(item: Item) {
     Swal.fire({
       icon: 'success',

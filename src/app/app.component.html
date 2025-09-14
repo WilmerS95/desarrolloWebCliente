@@ -1,4 +1,19 @@
-<router-outlet></router-outlet>
+<header class="store-header">
+  <div class="logo" (click)="goToStore()">
+    <img src="/empeños.png" alt="Logo de la tienda" />
+    <h1>Tienda de Empeños</h1>
+  </div>
+
+  <nav class="nav-links">
+    <button class="btn-pawn" (click)="goToPawn()"><i class="bi bi-cash-coin"></i> Empeñar</button>
+    <button class="btn-login" *ngIf="!isLoggedIn()" (click)="goToLogin()"><i class="bi bi-box-arrow-in-right"></i> Iniciar sesión</button>
+    <button *ngIf="isLoggedIn()" class="btn-logout" (click)="logout()"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</button>
+  </nav>
+</header>
+
+<main class="app-main">
+  <router-outlet></router-outlet>
+</main>
 
 <footer class="app-footer">
   <div class="footer-content">

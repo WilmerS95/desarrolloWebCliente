@@ -66,7 +66,6 @@
     <label class="form-label">Teléfono:   </label>
     <ngx-intl-tel-input
       [cssClass]="'form-control w-100'"
-      [cssClass]="'form-control'"
       [preferredCountries]="preferredCountries"
       [enableAutoCountrySelect]="true"
       [enablePlaceholder]="true"
@@ -74,9 +73,12 @@
       [searchCountryFlag]="true"
       [searchCountryField]="[SearchCountryField.All]"
       [selectFirstCountry]="true"
-      [maxLength]="15"
       formControlName="telephone">
     </ngx-intl-tel-input>
+    <div class="text-danger mt-1 small"
+         *ngIf="registerForm.get('telephone')?.invalid && registerForm.get('telephone')?.touched">
+      Número de teléfono inválido para el país seleccionado
+    </div>
   </div>
 
   <div class="mb-3">

@@ -49,7 +49,7 @@ export class RegisterComponent implements OnInit {
       secondLastName: [''],
       marriedLastName: [''],
       email: ['', [Validators.required, Validators.email]],
-      telephone: [ { number: '', internationalNumber: '', nationalNumber: '', e164Number: '', countryCode: CountryISO.Guatemala }, Validators.required ],
+      telephone: [ { number: '', internationalNumber: '', nationalNumber: '', e164Number: '', countryCode: CountryISO.Guatemala } ],
       address: ['']
     });
   }
