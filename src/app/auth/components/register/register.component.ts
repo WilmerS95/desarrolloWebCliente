@@ -1,19 +1,33 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgxIntlTelInputModule, SearchCountryField, CountryISO, PhoneNumberFormat } from 'ngx-intl-tel-input';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { RegisterRequest } from '../../../shared/models/register-request';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterLink,
+    NgxIntlTelInputModule
+  ],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.css'
+  styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
+
+  SearchCountryField = SearchCountryField;
+    CountryISO = CountryISO;
+    PhoneNumberFormat = PhoneNumberFormat;
+
+  preferredCountries: CountryISO[] = [CountryISO.Guatemala, CountryISO.Mexico, CountryISO.UnitedStates];
 
   constructor(
     private fb: FormBuilder,
@@ -23,51 +37,88 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     this.registerForm = this.fb.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required],
+      username: ['', [Validators.required, Validators.minLength(4)]],
+      password: ['', [
+              Validators.required,
+              Validators.minLength(5),
+              Validators.pattern(/^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).+$/) // al menos 1 mayúscula y 1 símbolo
+      ]],
       firstName: ['', Validators.required],
       secondOrMoreNames: [''],
       firstLastName: ['', Validators.required],
       secondLastName: [''],
       marriedLastName: [''],
       email: ['', [Validators.required, Validators.email]],
-      telephone: [''],
+      telephone: [ { number: '', internationalNumber: '', nationalNumber: '', e164Number: '', countryCode: CountryISO.Guatemala }, Validators.required ],
       address: ['']
     });
   }
 
   onSubmit() {
-    if (this.registerForm.invalid) {
-          this.registerForm.markAllAsTouched();
-          return;
-    }
+    if (this.registerForm.valid) {
 
-    const form = this.registerForm.value;
+      const formValue = { ...this.registerForm.value };
 
-    const { name, email, password } = this.registerForm.value;
-
-    const payload: RegisterRequest = {
-          username: form.username,
-          password: form.password,
-          firstName: form.firstName,
-          secondOrMoreNames: form.secondOrMoreNames || '',
-          firstLastName: form.firstLastName,
-          secondLastName: form.secondLastName || '',
-          marriedLastName: form.marriedLastName || '',
-          email: form.email,
-          telephone: form.telephone || '',
-          address: form.address || ''
-        };
-
-    this.authService.register(payload).subscribe({
-          next: () => {
-            Swal.fire({ icon: 'success', title: 'Registrado', text: 'Cuenta creada correctamente' });
-            this.router.navigate(['/login']);
-          },
-          error: (err) => {
-            console.error(err);
-            Swal.fire({ icon: 'error', title: 'Error', text: err?.error || 'No se pudo registrar' });
+      let telephoneStr = '';
+          if (formValue.telephone) {
+            if (typeof formValue.telephone === 'string') {
+              telephoneStr = formValue.telephone;
+            } else if (formValue.telephone.e164Number) {
+              telephoneStr = formValue.telephone.e164Number;
+            }
           }
-        });
+
+
+      const payload: RegisterRequest = {
+            username: formValue.username,
+            password: formValue.password,
+            firstName: formValue.firstName,
+            secondOrMoreNames: formValue.secondOrMoreNames || '',
+            firstLastName: formValue.firstLastName,
+            secondLastName: formValue.secondLastName || '',
+            marriedLastName: formValue.marriedLastName || '',
+            email: formValue.email,
+            telephone: telephoneStr,
+            address: formValue.address || ''
+          };
+
+         this.authService.register(payload).subscribe({
+           next: () => {
+             Swal.fire({ icon: 'success', title: 'Registrado', text: 'Cuenta creada correctamente' });
+             this.router.navigate(['/login']);
+           },
+           error: (err) => {
+             let errorMsg = 'No se pudo registrar';
+             const errorField = err?.error?.field;
+             const errorMessage = err?.error?.message;
+
+               if (errorMessage) {
+                 errorMsg = errorMessage;
+               } else if (typeof err.error === 'string') {
+                 errorMsg = err.error;
+               }
+
+              if (errorField === 'email') {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Correo ya registrado',
+                  text: errorMsg,
+                  showCancelButton: true,
+                  confirmButtonText: 'Recuperar contraseña',
+                  cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    this.router.navigate(['/forgot-password'], {
+                      queryParams: { email: formValue.email }
+                    });
+                  }
+                });
+              } else {
+                console.error(err);
+                Swal.fire({ icon: 'error', title: 'Error', text: errorMsg });
+                }
+           }
+         });
+      }
   }
 }
