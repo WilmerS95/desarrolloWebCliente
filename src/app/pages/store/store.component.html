@@ -32,6 +32,11 @@
     <h2>Catálogo de artículos</h2>
 
     <div class="products-container">
+
+      <div class="product-card no-items" *ngIf="filteredItems.length === 0">
+        <p>No hay artículos disponibles</p>
+      </div>
+
       <div class="product-card" *ngFor="let item of filteredItems">
         <img [src]="item.photos" [alt]="item.nameItem" />
         <div class="info-product">

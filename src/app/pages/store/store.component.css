@@ -71,7 +71,7 @@
 
 .products-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(4, minmax(250px, 1fr));
   gap: 1.5rem;
 }
 
@@ -190,4 +190,20 @@
 
 .comment small {
   color: #666;
+}
+
+.product-card.no-items {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 250px;
+  width: 100%;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #555;
+  background: #f1f1f1;
+  border-radius: 12px;
+  text-align: center;
+  justify-content: center;
+  grid-column: 1 / -1;
 }

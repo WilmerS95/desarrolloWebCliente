@@ -35,7 +35,7 @@ export class StoreComponent {
     { itemID: 4, categoryId: 2, nameItem: 'Collar', brand: 'Swarovski', photos: '/assets/products/Laptop.jpg', description: 'Collar de lujo', price: 1200 },
     { itemID: 5, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/Laptop.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
     { itemID: 5, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/Laptop.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
-    { itemID: 5, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/Laptop.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
+    { itemID: 5, categoryId: 3, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/Laptop.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
     { itemID: 5, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/Laptop.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
     { itemID: 5, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/Laptop.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
     { itemID: 5, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/Laptop.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
