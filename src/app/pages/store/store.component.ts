@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { AuthService } from '../../auth/services/auth.service';
 import Swal from 'sweetalert2';
 import { Item } from '../../shared/models/item';
 import { Category } from '../../shared/models/category';
@@ -27,7 +28,7 @@ export class StoreComponent {
     { categoryId: 4, categoryName: 'Otros', description: 'Otros no descritos' }
   ];
 
-items: Item[] = [
+  items: Item[] = [
     { itemID: 1, categoryId: 1, nameItem: 'Laptop Gamer', brand: 'Asus', photos: '/assets/products/Laptop.jpg', description: 'Laptop potente para gaming', price: 4500 },
     { itemID: 2, categoryId: 1, nameItem: 'Reloj Inteligente', brand: 'Apple', photos: '/assets/products/Laptop.jpg', description: 'Smartwatch de última generación', price: 2500 },
     { itemID: 3, categoryId: 2, nameItem: 'Pulsera', brand: 'Pandora', photos: '/assets/products/Laptop.jpg', description: 'Pulsera elegante', price: 800 },
@@ -50,14 +51,49 @@ items: Item[] = [
     { user: 'Juan Rodríguez', message: 'Me encantó la variedad de artículos.', rating: 5 }
   ];
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {
     this.filteredItems = this.items;}
 
-  /* isLoggedIn(): boolean {
-    return !!localStorage.getItem('auth_token');
-  } */
+  isLoggedIn(): boolean {
+    return this.authService.isAuthenticated();
+  }
+
+  logout() {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Cerrar sesión',
+      text: '¿Estás seguro que quieres cerrar sesión?',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, cerrar sesión',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.authService.logout();
+        Swal.fire({
+          icon: 'success',
+          title: 'Sesión cerrada',
+          text: 'Has cerrado sesión correctamente',
+          timer: 2000,
+          showConfirmButton: false
+        });
+      }
+    });
+  }
 
   goToPawn() {
+    if (this.isLoggedIn()) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Ya estás logueado',
+        text: 'Puedes continuar con el flujo de empeño normalmente.',
+        confirmButtonText: 'Aceptar'
+      });
+      return;
+    }
+
     Swal.fire({
           icon: 'info',
           title: 'Funcionalidad de empeño',
