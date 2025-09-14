@@ -58,24 +58,6 @@ export class LoginComponent {
     });
   }
 
-  loginWithGoogle() {
-    Swal.fire({
-      icon: 'info',
-      title: 'Login con Google',
-      text: 'Funcionalidad de login con Google aún no disponible.',
-      confirmButtonText: 'Entendido'
-    });
-  }
-
-  loginWithFacebook() {
-    Swal.fire({
-      icon: 'info',
-      title: 'Login con Facebook',
-      text: 'Funcionalidad de login con Facebook aún no disponible.',
-      confirmButtonText: 'Vale'
-    });
-  }
-
   loginWithEmail() {
     Swal.fire({
       icon: 'info',
