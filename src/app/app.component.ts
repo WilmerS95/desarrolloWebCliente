@@ -53,6 +53,7 @@ export class AppComponent {
 
   goToPawn() {
       if (this.isLoggedIn()) {
+        this.router.navigate(['/loan-application']);
         Swal.fire({
           icon: 'info',
           title: 'Ya estás logueado',

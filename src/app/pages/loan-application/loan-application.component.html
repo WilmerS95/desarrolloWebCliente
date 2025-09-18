@@ -1,0 +1,21 @@
+<div class="loan-application-container">
+  <h2>Solicitud de Préstamo (Empeño)</h2>
+
+  <form [formGroup]="loanForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label for="itemID">Artículo a empeñar</label>
+      <select id="itemID" formControlName="itemID">
+        <option *ngFor="let item of items" [value]="item.itemID">
+          {{ item.nameItem }} - {{ item.brand }}
+        </option>
+      </select>
+    </div>
+
+    <div>
+      <label for="quantityPayments">Cantidad de pagos</label>
+      <input type="number" id="quantityPayments" formControlName="quantityPayments" min="1" />
+    </div>
+
+    <button type="submit" [disabled]="loanForm.invalid">Enviar Solicitud</button>
+  </form>
+</div>
