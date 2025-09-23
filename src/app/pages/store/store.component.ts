@@ -29,7 +29,7 @@ export class StoreComponent {
   ];
 
   items: Item[] = [
-    { itemID: 1, categoryId: 1, nameItem: 'Laptop Gamer', brand: 'Asus', photos: '/assets/products/Laptop.jpg', description: 'Laptop potente para gaming', price: 4500 },
+    { itemID: 1, categoryId: 1, nameItem: 'Laptop Gamer', brand: 'Asus', photos: 'https://firebasestorage.googleapis.com/v0/b/solutec-pawn.firebasestorage.app/o/items%2Fimg_not_found.jpg?alt=media&token=c0f59d33-6a8c-4ecc-bcd0-e23b324a4cbf', description: 'Laptop potente para gaming', price: 4500 },
     { itemID: 2, categoryId: 1, nameItem: 'Reloj Inteligente', brand: 'Apple', photos: '/assets/products/Laptop.jpg', description: 'Smartwatch de última generación', price: 2500 },
     { itemID: 3, categoryId: 2, nameItem: 'Pulsera', brand: 'Pandora', photos: '/assets/products/Laptop.jpg', description: 'Pulsera elegante', price: 800 },
     { itemID: 4, categoryId: 2, nameItem: 'Collar', brand: 'Swarovski', photos: '/assets/products/Laptop.jpg', description: 'Collar de lujo', price: 1200 },
