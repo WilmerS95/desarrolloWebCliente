@@ -36,6 +36,7 @@ export class AppComponent {
         role: this.authService.getUserRole()
       };
     }
+    document.addEventListener('click', this.handleClickOutside.bind(this));
   }
 
   addToCart(item: CartItem) {
@@ -160,5 +161,18 @@ export class AppComponent {
         });
       }
     });
+  }
+
+  handleClickOutside(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    const dropdown = document.querySelector('.user-dropdown');
+
+    if (dropdown && !dropdown.contains(target)) {
+      this.dropdownOpen = false;
+    }
+  }
+
+  ngOnDestroy() {
+    document.removeEventListener('click', this.handleClickOutside.bind(this));
   }
 }
