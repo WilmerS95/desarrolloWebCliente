@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './auth/services/auth.service';
+import { CartService } from './services/cart.service';
+import { CartItem } from './shared/models/CartItem';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -13,12 +15,45 @@ import Swal from 'sweetalert2';
 export class AppComponent {
   title = 'desarrollo-web';
   currentYear = new Date().getFullYear();
+  currentUser: any = null;
+  dropdownOpen = false;
+  cartCount = 0;
 
   constructor(
       private router: Router,
-      private authService: AuthService
+      private authService: AuthService,
+      private cartService: CartService
   ) {}
 
+  ngOnInit() {
+    this.cartService.cartCount$.subscribe(count => {
+      this.cartCount = count;
+    });
+    //this.updateCart();
+    if (this.isLoggedIn()) {
+      this.currentUser = {
+        name: this.authService.getUserName(),
+        role: this.authService.getUserRole()
+      };
+    }
+  }
+
+  addToCart(item: CartItem) {
+    this.cartService.addItem(item);
+    this.updateCart();
+  }
+
+  updateCart() {
+    this.cartCount = this.cartService.getCount();
+  }
+
+  get isAdmin(): boolean {
+    return this.currentUser?.role === 'ADMIN';
+  }
+
+  get isSuperAdmin(): boolean {
+    return this.currentUser?.role === 'SA';
+  }
 
   showPrivacyPolicy(event: Event) {
     event.preventDefault();
@@ -84,12 +119,24 @@ export class AppComponent {
       } */
     }
 
+  goToHistory() {
+    this.router.navigate(['/history']);
+  }
+
   goToLogin() {
     this.router.navigate(['/login']);
   }
 
   isLoggedIn(): boolean {
     return this.authService.isAuthenticated();
+  }
+
+  toggleDropdown() {
+    this.dropdownOpen = !this.dropdownOpen;
+  }
+
+  goToRegister(){
+    this.router.navigate(['/register']);
   }
 
   logout() {

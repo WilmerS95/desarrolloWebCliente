@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AuthService } from '../../auth/services/auth.service';
+import { CartService } from '../../services/cart.service';
 import Swal from 'sweetalert2';
 import { Item } from '../../shared/models/item';
 import { Category } from '../../shared/models/category';
@@ -16,6 +17,14 @@ import { Category } from '../../shared/models/category';
 })
 export class StoreComponent {
   currentYear = new Date().getFullYear();
+
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    public cartService: CartService
+  ) {
+    this.filteredItems = this.items;
+  }
 
   searchTerm: string = '';
   selectedCategory: string | number = 'all';
@@ -51,17 +60,17 @@ export class StoreComponent {
     { user: 'Juan Rodríguez', message: 'Me encantó la variedad de artículos.', rating: 5 }
   ];
 
-  constructor(
-    private router: Router,
-    private authService: AuthService
-  ) {
-    this.filteredItems = this.items;}
-
   isLoggedIn(): boolean {
     return this.authService.isAuthenticated();
   }
 
   addToCart(item: Item) {
+    this.cartService.addItem({
+      id: item.itemID,
+      name: item.nameItem,
+      price: item.price ?? 0,
+      quantity: 1
+    });
     Swal.fire({
       icon: 'success',
       title: 'Artículo agregado',

@@ -69,3 +69,23 @@ textarea {
 .submit-btn:hover:not(:disabled) {
   background: #2980b9;
 }
+
+.input-with-prefix {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.input-with-prefix .prefix {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-weight: bold;
+}
+
+.input-with-prefix input {
+  padding-left: 60px;
+  width: 100%;
+  box-sizing: border-box;
+}

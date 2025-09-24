@@ -26,6 +26,27 @@ export class AuthService {
     return this.getBaseUrl() + '/auth';
   }
 
+  private decodeToken(token: string): any {
+    try {
+      return JSON.parse(atob(token.split('.')[1]));
+    } catch (e) {
+      console.error('Error al decodificar token', e);
+      return null;
+    }
+  }
+
+  getUserName(): string {
+    const token = this.getToken();
+    if (!token) return '';
+    return this.decodeToken(token)?.sub || '';
+  }
+
+  getUserRole(): string {
+    const token = this.getToken();
+    if (!token) return '';
+    return this.decodeToken(token)?.role || '';
+  }
+
 
   forgotPassword(email: string): Observable<any> {
     return this.http.post(`${this.authBase}/forgot-password`, { email });
