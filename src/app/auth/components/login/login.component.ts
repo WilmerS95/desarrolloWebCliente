@@ -47,14 +47,31 @@ export class LoginComponent {
           this.router.navigate(['/store']);
         });
       },
-      error: () => {
+      error: (err: any) => {
+        this.loading = false;
+        if (err.status === 401 || (err.error?.message === 'Usuario o contraseña incorrectos')) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Credenciales inválidas',
+            text: 'El usuario o la contraseña son incorrectos'
+          });
+        } else {
+          // Cualquier otro error
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Ocurrió un error inesperado. Intente nuevamente más tarde.'
+          });
+        }
+      }
+      /* error: () => {
         this.loading = false;
         Swal.fire({
           icon: 'error',
           title: 'Error',
           text: 'Usuario o contraseña incorrectos'
         });
-      }
+      } */
     });
   }
 }

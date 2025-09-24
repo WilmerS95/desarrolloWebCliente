@@ -10,9 +10,7 @@ export class AuthService {
   private readonly _baseUrl = new BehaviorSubject<string>('http://192.168.1.37:8080');
   public readonly baseUrl$: Observable<string> = this._baseUrl.asObservable();
 
-  constructor(
-    private http: HttpClient
-  ) {}
+  constructor( private http: HttpClient ) {}
 
   setBaseUrl(newUrl: string) {
     this._baseUrl.next(newUrl);
@@ -85,8 +83,4 @@ export class AuthService {
   isAuthenticated(): boolean {
     return !!this.getToken();
   }
-
-   /* login(email: string, password: string): Observable<any> {
-    return this.http.post('/api/auth/login', { email, password });
-  } */
 }
