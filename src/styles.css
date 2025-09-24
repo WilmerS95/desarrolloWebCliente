@@ -13,3 +13,9 @@ a.text-primary:hover {
 button i {
   vertical-align: middle;
 }
+
+.toast-info {
+    margin-top: 90px;
+    font-size: 14px;
+    border-radius: 8px;
+}

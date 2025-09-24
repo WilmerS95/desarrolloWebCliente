@@ -55,10 +55,17 @@ export class AppComponent {
       if (this.isLoggedIn()) {
         this.router.navigate(['/loan-application']);
         Swal.fire({
+          toast: true,
+          position: 'top-end',
           icon: 'info',
-          title: 'Ya estás logueado',
-          text: 'Puedes continuar con el flujo de empeño normalmente.',
-          confirmButtonText: 'Aceptar'
+          title: '¡Bienvenido!',
+          text: 'Aquí puedes realizar la solicitud de empeño.',
+          showConfirmButton: false,
+          timer: 2500,
+          timerProgressBar: true,
+          customClass: {
+            popup: 'toast-info'
+          }
         });
         return;
       }
