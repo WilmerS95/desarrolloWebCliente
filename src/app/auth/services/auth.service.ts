@@ -1,21 +1,34 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { RegisterRequest } from '../../shared/models/register-request';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
-  private apiUrl = 'http://192.168.1.37:8080/auth';
-  //private apiUrl = 'http://192.168.1.33:9000/auth';
+  private readonly _baseUrl = new BehaviorSubject<string>('http://192.168.1.37:8080');
+  public readonly baseUrl$: Observable<string> = this._baseUrl.asObservable();
 
   constructor(
     private http: HttpClient
   ) {}
 
+  setBaseUrl(newUrl: string) {
+    this._baseUrl.next(newUrl);
+  }
+
+  getBaseUrl(): string {
+    return this._baseUrl.getValue();
+  }
+
+  private get authBase(): string {
+    return this.getBaseUrl() + '/auth';
+  }
+
+
   forgotPassword(email: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/forgot-password`, { email });
+    return this.http.post(`${this.authBase}/forgot-password`, { email });
   }
 
   resetPassword(token: string, newPassword: string): Observable<any> {
@@ -23,15 +36,15 @@ export class AuthService {
         token: token,
         newPassword: newPassword
       };
-      return this.http.post(`${this.apiUrl}/reset-password`, body);
+      return this.http.post(`${this.authBase}/reset-password`, body);
   }
 
   register(data: RegisterRequest): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, data);
+    return this.http.post(`${this.authBase}/register`, data);
   }
 
   login(username: string, password: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/login`, { username, password }).pipe(
+    return this.http.post<any>(`${this.authBase}/login`, { username, password }).pipe(
       tap(response => {
         if (response.token) {
           localStorage.setItem('token', response.token);

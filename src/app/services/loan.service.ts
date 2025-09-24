@@ -7,7 +7,6 @@ import { AuthService } from '../auth/services/auth.service';
   providedIn: 'root'
 })
 export class LoanService {
-  private apiUrl = 'http://192.168.1.37:8080/loan-applications';
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -15,15 +14,19 @@ export class LoanService {
     return this.http.get<any[]>(`${this.apiUrl}/items`);
   } */
 
+  private get loanBase(): string {
+    return this.authService.getBaseUrl() + '/loan-applications';
+  }
+
   getCategories(): Observable<any[]> {
     const token = this.authService.getToken();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.get<any[]>(`${this.apiUrl}/categories`, { headers });
+    return this.http.get<any[]>(`${this.loanBase}/categories`, { headers });
   }
 
   createLoanApplication(formData: FormData): Observable<any> {
       const token = this.authService.getToken();
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-      return this.http.post(`${this.apiUrl}`, formData, { headers });
+      return this.http.post(`${this.loanBase}`, formData, { headers });
     }
 }
