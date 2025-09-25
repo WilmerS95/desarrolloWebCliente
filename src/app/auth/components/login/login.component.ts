@@ -40,11 +40,18 @@ export class LoginComponent {
       next: () => {
         this.loading = false;
         Swal.fire({
+          toast: true,
+          position: 'top-end',
           icon: 'success',
           title: 'Bienvenido',
-          text: 'Inicio de sesión exitoso'
+          text: 'Inicio de sesión exitoso',
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true
         }).then(() => {
-          this.router.navigate(['/store']);
+          this.router.navigate(['/store']).then(() => {
+            window.location.reload();
+          });
         });
       },
       error: (err: any) => {

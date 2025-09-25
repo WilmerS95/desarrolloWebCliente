@@ -26,15 +26,17 @@ export class AppComponent {
   ) {}
 
   ngOnInit() {
-    this.cartService.cartCount$.subscribe(count => {
-      this.cartCount = count;
-    });
+    this.cartService.cartCount$.subscribe(count => { this.cartCount = count });
     //this.updateCart();
     if (this.isLoggedIn()) {
       this.currentUser = {
         name: this.authService.getUserName(),
         role: this.authService.getUserRole()
       };
+    }
+    const exp = localStorage.getItem('token_exp');
+    if (exp) {
+      this.authService['scheduleTokenCheck'](parseInt(exp, 10));
     }
     document.addEventListener('click', this.handleClickOutside.bind(this));
   }
@@ -53,7 +55,7 @@ export class AppComponent {
   }
 
   get isSuperAdmin(): boolean {
-    return this.currentUser?.role === 'SA';
+    return this.currentUser?.role === 'SUPER_ADMIN';
   }
 
   showPrivacyPolicy(event: Event) {

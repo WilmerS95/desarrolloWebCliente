@@ -3,9 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { RegisterRequest } from '../../shared/models/register-request';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import Swal from 'sweetalert2';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+
+  private tokenTimer: any;
 
   private readonly _baseUrl = new BehaviorSubject<string>('http://192.168.1.37:8080');
   public readonly baseUrl$: Observable<string> = this._baseUrl.asObservable();
@@ -45,7 +48,6 @@ export class AuthService {
     return this.decodeToken(token)?.role || '';
   }
 
-
   forgotPassword(email: string): Observable<any> {
     return this.http.post(`${this.authBase}/forgot-password`, { email });
   }
@@ -67,6 +69,12 @@ export class AuthService {
       tap(response => {
         if (response.token) {
           localStorage.setItem('token', response.token);
+          const decoded = this.decodeToken(response.token);
+          if (decoded?.exp) {
+            const expiresAt = decoded.exp * 1000;
+            localStorage.setItem('token_exp', expiresAt.toString());
+            this.scheduleTokenCheck(expiresAt);
+          }
         }
       })
     );
@@ -82,5 +90,26 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     return !!this.getToken();
+  }
+
+  private scheduleTokenCheck(expiresAt: number) {
+    const timeLeft = expiresAt - Date.now();
+    if (timeLeft <= 0) {
+      this.handleSessionExpired();
+    } else {
+      this.tokenTimer = setTimeout(() => {
+        this.handleSessionExpired();
+      }, timeLeft);
+    }
+  }
+
+  private handleSessionExpired() {
+    this.logout();
+    Swal.fire({
+      icon: 'warning',
+      title: 'Sesión expirada',
+      text: 'Por favor, inicia sesión nuevamente',
+      confirmButtonText: 'Aceptar'
+    });
   }
 }
