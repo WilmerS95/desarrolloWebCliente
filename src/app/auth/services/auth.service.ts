@@ -10,7 +10,7 @@ export class AuthService {
 
   private tokenTimer: any;
 
-  private readonly _baseUrl = new BehaviorSubject<string>('http://192.168.1.37:8080');
+  private readonly _baseUrl = new BehaviorSubject<string>('http://192.168.116.57:8080');
   public readonly baseUrl$: Observable<string> = this._baseUrl.asObservable();
 
   constructor( private http: HttpClient ) {}
@@ -78,6 +78,22 @@ export class AuthService {
         }
       })
     );
+  }
+
+  getUserPermissions(): string[] {
+    const token = this.getToken();
+    if (!token) return [];
+    return this.decodeToken(token)?.permissions || [];
+  }
+
+  hasPermission(permission: string): boolean {
+    const permissions = this.getUserPermissions();
+    return permissions.includes('ALL_PERMISSION') || permissions.includes(permission);
+  }
+
+  hasAnyPermission(required: string[]): boolean {
+    const permissions = this.getUserPermissions();
+    return required.some(p => permissions.includes(p));
   }
 
   logout() {

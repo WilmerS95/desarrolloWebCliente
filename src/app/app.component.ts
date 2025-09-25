@@ -54,8 +54,12 @@ export class AppComponent {
     return this.currentUser?.role === 'ADMIN';
   }
 
-  get isSuperAdmin(): boolean {
+  /* get isSuperAdmin(): boolean {
     return this.currentUser?.role === 'SUPER_ADMIN';
+  } */
+
+  can(permission: string): boolean {
+    return this.authService.hasPermission(permission);
   }
 
   showPrivacyPolicy(event: Event) {
