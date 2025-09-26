@@ -50,13 +50,11 @@ export class LoanApplicationComponent implements OnInit {
     if (this.loanForm.valid) {
       const formData = new FormData();
 
-      // JSON como Blob
       formData.append(
         'data',
         new Blob([JSON.stringify(this.loanForm.value)], { type: 'application/json' })
       );
 
-      // Archivos
       this.selectedFiles.forEach(file => formData.append('files', file));
 
       this.loanService.createLoanApplication(formData).subscribe({

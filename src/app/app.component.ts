@@ -134,6 +134,10 @@ export class AppComponent {
     this.router.navigate(['/login']);
   }
 
+  goToRoles(){
+    this.router.navigate(['/roles']);
+  }
+
   isLoggedIn(): boolean {
     return this.authService.isAuthenticated();
   }

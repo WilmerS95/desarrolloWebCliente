@@ -40,7 +40,7 @@
             <a routerLink="/pending">Pendientes</a>
           </li>
           <li *ngIf="can('ALL_PERMISSION')">
-            <a routerLink="/roles">Administrar Roles</a>
+            <a (click)="goToRoles()">Administrar Roles</a>
           </li>
           <li class="divider"></li>
           <li><a class="text-danger" (click)="logout()">Cerrar sesión</a></li>

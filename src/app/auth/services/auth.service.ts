@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { RegisterRequest } from '../../shared/models/register-request';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
 @Injectable({ providedIn: 'root' })
@@ -13,7 +14,7 @@ export class AuthService {
   private readonly _baseUrl = new BehaviorSubject<string>('http://192.168.116.57:8080');
   public readonly baseUrl$: Observable<string> = this._baseUrl.asObservable();
 
-  constructor( private http: HttpClient ) {}
+  constructor( private http: HttpClient, private router: Router ) {}
 
   setBaseUrl(newUrl: string) {
     this._baseUrl.next(newUrl);
@@ -126,6 +127,8 @@ export class AuthService {
       title: 'Sesión expirada',
       text: 'Por favor, inicia sesión nuevamente',
       confirmButtonText: 'Aceptar'
+    }).then(() => {
+      this.router.navigate(['/store']);
     });
   }
 }
