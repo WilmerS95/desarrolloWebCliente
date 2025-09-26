@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Role } from '../shared/models/Role';
 import { AppRolePermission } from '../shared/models/AppRolePermission';
 import { AuthService } from '../auth/services/auth.service';
+import { RoleRequest } from '../shared/models/RoleRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -24,11 +25,11 @@ export class RoleService {
     return this.http.get<Role>(`${this.loanBase}/${id}`);
   }
 
-  createRole(role: Role): Observable<Role> {
+  createRole(role: RoleRequest): Observable<Role> {
     return this.http.post<Role>(this.loanBase, role);
   }
 
-  updateRole(id: number, role: Role): Observable<Role> {
+  updateRole(id: number, role: RoleRequest): Observable<Role> {
     return this.http.put<Role>(`${this.loanBase}/${id}`, role);
   }
 

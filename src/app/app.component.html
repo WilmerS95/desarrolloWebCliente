@@ -40,6 +40,9 @@
             <a routerLink="/pending">Pendientes</a>
           </li>
           <li *ngIf="can('ALL_PERMISSION')">
+            <a (click)="goToAdminUsers()">Administrar Usuarios</a>
+          </li>
+          <li *ngIf="can('ALL_PERMISSION')">
             <a (click)="goToRoles()">Administrar Roles</a>
           </li>
           <li class="divider"></li>

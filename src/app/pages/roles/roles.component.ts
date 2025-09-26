@@ -6,6 +6,7 @@ import { Role } from '../../shared/models/Role';
 import { AppRolePermission } from '../../shared/models/AppRolePermission';
 import { RoleService } from '../../services/role.service';
 import { PermissionService } from '../../services/permission.service';
+import { RoleRequest } from '../../shared/models/RoleRequest';
 
 @Component({
   selector: 'app-roles',
@@ -82,16 +83,22 @@ export class RolesComponent implements OnInit {
       roleId: this.editingRole ? this.editingRole.roleId : 0,
       roleName: formValue.roleName,
       description: formValue.description,
-      permissions: selectedPermissions
+      permissions: selectedPermissions// ?? []
+    };
+
+    const request : RoleRequest = {
+      roleName: roleData.roleName,
+      description: roleData.description,
+      permissionIds: formValue.permissions ?? []
     };
 
     if (this.editingRole) {
-      this.roleService.updateRole(this.editingRole.roleId, roleData).subscribe(() => {
+      this.roleService.updateRole(this.editingRole.roleId, request).subscribe(() => {
         this.loadRoles();
         this.showForm = false;
       });
     } else {
-      this.roleService.createRole(roleData).subscribe(() => {
+      this.roleService.createRole(request).subscribe(() => {
         this.loadRoles();
         this.showForm = false;
       });

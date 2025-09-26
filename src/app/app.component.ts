@@ -138,6 +138,10 @@ export class AppComponent {
     this.router.navigate(['/roles']);
   }
 
+  goToAdminUsers(){
+    this.router.navigate(['/admin-users']);
+  }
+
   isLoggedIn(): boolean {
     return this.authService.isAuthenticated();
   }
