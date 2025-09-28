@@ -6,6 +6,7 @@ import { ResetPasswordComponent } from './auth/components/reset-password/reset-p
 import { StoreComponent } from './pages/store/store.component';
 import { LoanApplicationComponent } from './pages/loan-application/loan-application.component';
 import { RolesComponent } from './pages/roles/roles.component';
+import { UsersManagementComponent } from './pages/users-management/users-management.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'store', pathMatch: 'full' },
@@ -16,5 +17,6 @@ export const routes: Routes = [
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'loan-application', component: LoanApplicationComponent },
   { path: 'roles', component: RolesComponent },
+  { path: 'admin-users', component: UsersManagementComponent },
   { path: '**', redirectTo: 'store' }
 ];

@@ -11,7 +11,7 @@ export class AuthService {
 
   private tokenTimer: any;
 
-  private readonly _baseUrl = new BehaviorSubject<string>('http://192.168.116.57:8080');
+  private readonly _baseUrl = new BehaviorSubject<string>('http://192.168.1.35:8080');
   public readonly baseUrl$: Observable<string> = this._baseUrl.asObservable();
 
   constructor( private http: HttpClient, private router: Router ) {}

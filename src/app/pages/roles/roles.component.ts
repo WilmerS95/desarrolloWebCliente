@@ -7,6 +7,7 @@ import { AppRolePermission } from '../../shared/models/AppRolePermission';
 import { RoleService } from '../../services/role.service';
 import { PermissionService } from '../../services/permission.service';
 import { RoleRequest } from '../../shared/models/RoleRequest';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-roles',
@@ -42,14 +43,16 @@ export class RolesComponent implements OnInit {
   }
 
   loadRoles(): void {
-    this.roleService.getRoles().subscribe((data: Role[]) => {
-      this.roles = data;
+    this.roleService.getRoles().subscribe({
+      next: (data: Role[]) => (this.roles = data),
+      error: () => this.showError('Error al cargar roles')
     });
   }
 
   loadPermissions(): void {
-    this.permissionService.getAllPermissions().subscribe((data: AppRolePermission[]) => {
-      this.allPermissions = data;
+    this.permissionService.getAllPermissions().subscribe({
+      next: (data: AppRolePermission[]) => (this.allPermissions = data),
+      error: () => this.showError('Error al cargar permisos')
     });
   }
 
@@ -76,40 +79,52 @@ export class RolesComponent implements OnInit {
 
   saveRole(): void {
     const formValue = this.roleForm.value;
-    const selectedPermissions: AppRolePermission[] =
-      this.allPermissions.filter(p => formValue.permissions.includes(p.permissionId));
-
-    const roleData: Role = {
-      roleId: this.editingRole ? this.editingRole.roleId : 0,
+    const request: RoleRequest = {
       roleName: formValue.roleName,
       description: formValue.description,
-      permissions: selectedPermissions// ?? []
-    };
-
-    const request : RoleRequest = {
-      roleName: roleData.roleName,
-      description: roleData.description,
       permissionIds: formValue.permissions ?? []
     };
 
     if (this.editingRole) {
-      this.roleService.updateRole(this.editingRole.roleId, request).subscribe(() => {
-        this.loadRoles();
-        this.showForm = false;
+      this.roleService.updateRole(this.editingRole.roleId, request).subscribe({
+        next: () => {
+          this.showSuccess('Rol actualizado correctamente');
+          this.loadRoles();
+          this.showForm = false;
+        },
+        error: () => this.showError('Error al actualizar el rol')
       });
     } else {
-      this.roleService.createRole(request).subscribe(() => {
-        this.loadRoles();
-        this.showForm = false;
+      this.roleService.createRole(request).subscribe({
+        next: () => {
+          this.showSuccess('Rol creado correctamente');
+          this.loadRoles();
+          this.showForm = false;
+        },
+        error: () => this.showError('Error al crear el rol')
       });
     }
   }
 
   deleteRole(id: number): void {
-    if (confirm('¿Seguro que quieres eliminar este rol?')) {
-      this.roleService.deleteRole(id).subscribe(() => this.loadRoles());
+    Swal.fire({
+      title: '¿Seguro que quieres eliminar este rol?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then(result => {
+      if (result.isConfirmed) {
+        this.roleService.deleteRole(id).subscribe({
+          next: () => {
+            this.showSuccess('Rol eliminado correctamente');
+            this.loadRoles();
+          },
+          error: () => this.showError('Error al eliminar el rol')
+        });
+      }
+    });
     }
-  }
 
   getPermissionNames(role: Role): string {
     return role.permissions?.map(p => p.permissionName).join(', ') || '(sin permisos)';
@@ -126,5 +141,21 @@ export class RolesComponent implements OnInit {
     } else {
       this.roleForm.patchValue({ permissions: selected.filter(id => id !== permissionId) });
     }
+  }
+  private showSuccess(message: string) {
+    Swal.fire({
+      icon: 'success',
+      title: 'Éxito',
+      text: message,
+      timer: 1500,
+      showConfirmButton: false
+    });
+  }
+  private showError(message: string) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: message
+    });
   }
 }

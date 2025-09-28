@@ -1,0 +1,80 @@
+<div class="container mt-4">
+  <h2>Administrar Usuarios</h2>
+
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre Completo</th>
+      <th>Email</th>
+      <th>Rol Actual</th>
+      <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{ user.userID }}</td>
+      <td>
+        {{ user.firstName }}
+        {{ user.secondOrMoreNames || '' }}
+        {{ user.firstLastName }}
+        {{ user.secondLastName || '' }}
+      </td>
+      <td>{{ user.email }}</td>
+      <td>{{ getRoleName(user.roleID) }}</td>
+      <td>
+        <button class="btn btn-sm btn-warning me-2" (click)="startEdit(user)">
+          <i class="bi bi-pencil"></i> Editar
+        </button>
+        <button class="btn btn-sm btn-danger" (click)="deleteUser(user)">
+          <i class="bi bi-trash3"></i> Eliminar
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- Formulario de edición/creación -->
+  <div *ngIf="showForm" class="card p-3 mt-3">
+    <h4>Editar Usuario</h4>
+    <form [formGroup]="userForm" (ngSubmit)="saveUser()">
+      <div class="mb-3">
+        <label>Nombre</label>
+        <input formControlName="firstName" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label>Segundo Nombre(s)</label>
+        <input formControlName="secondOrMoreNames" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label>Primer Apellido</label>
+        <input formControlName="firstLastName" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label>Segundo Apellido</label>
+        <input formControlName="secondLastName" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label>Email</label>
+        <input formControlName="email" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label>Teléfono</label>
+        <input formControlName="telephone" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label>Dirección</label>
+        <input formControlName="address" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label>Rol</label>
+        <select formControlName="roleID" class="form-control">
+          <option *ngFor="let role of roles" [value]="role.roleId">{{ role.roleName }}</option>
+        </select>
+      </div>
+
+      <button class="btn btn-success" type="submit" [disabled]="userForm.invalid">Guardar</button>
+      <button class="btn btn-secondary ms-2" type="button" (click)="cancelEdit()">Cancelar</button>
+    </form>
+  </div>
+</div>
