@@ -30,6 +30,10 @@ export class UserService {
     return this.http.patch<User>(`${this.urlBase}/${userId}/role?roleId=${roleId}`, {});
   }
 
+  updateUser(user: User) {
+    return this.http.put<User>(`${this.urlBase}/${user.userID}`, user);
+  }
+
   deleteUser(userId: number): Observable<void> {
     return this.http.delete<void>(`${this.urlBase}/${userId}`);
   }

@@ -34,14 +34,24 @@ export class UsersManagementComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadUsers();
-    this.loadRoles();
+    this.userService.getAllRoles().subscribe({
+      next: roles => {
+        this.roles = roles;
+        this.loadUsers();
+      },
+      error: err => console.error(err)
+    });
   }
 
   loadUsers() {
     this.userService.getAllUsers().subscribe({
-      next: (res) => (this.users = res),
-      error: (err) => console.error(err)
+      next: res => {
+        this.users = res.map(u => ({
+          ...u,
+          roleID: this.roles.find(r => r.roleName === u.roleName)?.roleId ?? null
+        }));
+      },
+      error: err => console.error(err)
     });
   }
 
@@ -52,7 +62,8 @@ export class UsersManagementComponent implements OnInit {
     });
   }
 
-  getRoleName(roleId: number): string {
+  getRoleName(roleId: number | null): string {
+    if (roleId == null) return 'Sin rol';
     const role = this.roles.find(r => r.roleId === roleId);
     return role ? role.roleName : 'Sin rol';
   }
@@ -71,19 +82,25 @@ export class UsersManagementComponent implements OnInit {
   saveUser() {
     if (!this.editingUser) return;
 
-    const updated = { ...this.editingUser, ...this.userForm.value } as User;
+    const formValue = this.userForm.value;
 
-    if (updated.roleID !== this.editingUser.roleID) {
-      this.userService.updateUserRole(updated.userID, updated.roleID).subscribe({
-        next: () => {
-          this.loadUsers();
-          this.showSuccess('Rol actualizado');
-        },
-        error: () => this.showError('Error al actualizar el rol')
-      });
-    }
+    const updated: any = {
+      ...this.editingUser,
+      ...formValue,
+      role: { roleId: formValue.roleID }
+    };
 
-    this.showForm = false;
+    delete updated.roleID;
+
+    this.userService.updateUser(updated).subscribe({
+      next: () => {
+        this.loadUsers();
+        this.showSuccess('Usuario actualizado correctamente');
+        this.showForm = false;
+        this.editingUser = null;
+      },
+      error: () => this.showError('Error al actualizar el usuario')
+    });
   }
 
   deleteUser(user: User) {

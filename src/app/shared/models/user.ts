@@ -12,6 +12,8 @@ export interface User {
   email: string;
   telephone?: string;
   address?: string;
-  roleID: number;
+  roleID: number | null;
+  roleName?: string;
+  permissions?: string[];
   role?: Role;
 }
