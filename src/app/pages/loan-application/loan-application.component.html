@@ -48,7 +48,7 @@
 
     <div class="form-group">
       <label for="formFileMultiple">Fotos del artículo</label>
-      <input class="form-control" type="file" id="formFileMultiple" (change)="onFileSelected($event)" multiple>
+      <input #fileInput class="form-control" type="file" id="formFileMultiple" (change)="onFileSelected($event)" multiple>
     </div>
 
     <button class="submit-btn" type="submit" [disabled]="loanForm.invalid">Enviar Solicitud</button>

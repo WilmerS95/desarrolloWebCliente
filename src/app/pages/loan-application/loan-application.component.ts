@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -15,6 +15,8 @@ export class LoanApplicationComponent implements OnInit {
   loanForm!: FormGroup;
   selectedFiles: File[] = [];
   categories: any[] = [];
+
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   constructor(private fb: FormBuilder, private loanService: LoanService) {}
 
@@ -66,6 +68,9 @@ export class LoanApplicationComponent implements OnInit {
           });
           this.loanForm.reset();
           this.selectedFiles = [];
+          if (this.fileInput) {
+            this.fileInput.nativeElement.value = '';
+          }
         },
         error: err => {
           Swal.fire({

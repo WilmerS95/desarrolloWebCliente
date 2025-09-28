@@ -27,7 +27,7 @@ export class UserService {
   }
 
   updateUserRole(userId: number, roleId: number): Observable<User> {
-    return this.http.patch<User>(`${this.urlBase}/${userId}/role?roleId=${roleId}`, {});
+    return this.http.put<User>(`${this.urlBase}/${userId}/role?roleId=${roleId}`, {});
   }
 
   updateUser(user: User) {
