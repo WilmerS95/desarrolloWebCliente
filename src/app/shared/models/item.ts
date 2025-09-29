@@ -5,6 +5,6 @@ export interface Item {
   brand?: string;
   description?: string;
   specification?: string;
-  photos?: string; // puede ser URL o base64
+  photos?: string;
   price?: number;
 }

@@ -1,0 +1,30 @@
+.container {
+  margin-top: 1rem;
+  padding-bottom: 6rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  text-align: center;
+  background-color: #f8f9fa;
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+.photo-container {
+  display: inline-block;
+  margin: 2px;
+}
+
+.photo-preview {
+  width: 80px;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}

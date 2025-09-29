@@ -1,0 +1,70 @@
+<div class="container mt-4">
+  <h2>Solicitudes de Empeño</h2>
+
+  <div *ngIf="loading">Cargando...</div>
+
+  <table class="table table-bordered table-striped mt-3" *ngIf="!loading">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Artículo</th>
+      <th>Marca</th>
+      <th>Pagos</th>
+      <th>Fecha</th>
+      <th>Fotos</th>
+      <th>Estado</th>
+      <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let app of applications">
+      <td>{{ app.loanApplicationId }}</td>
+      <td>{{ app.itemName }}</td>
+      <td>{{ app.brand }}</td>
+      <td>{{ app.quantityPayments }}</td>
+      <td>{{ app.applicationDate | date:'short' }}</td>
+      <td>
+        <div class="photo-container" *ngFor="let url of app.photoUrls">
+          <img [src]="url" alt="foto" class="photo-preview">
+        </div>
+      </td>
+      <td>{{ app.status }}</td>
+      <td>
+        <button
+          class="btn btn-success btn-sm me-1"
+          (click)="accept(app)"
+          [disabled]="app.status !== 'PENDING'">
+          Aceptar
+        </button>
+
+        <button
+          class="btn btn-danger btn-sm me-1"
+          (click)="reject(app)"
+          [disabled]="app.status !== 'PENDING'">
+          Rechazar
+        </button>
+
+        <button
+          class="btn btn-info btn-sm me-1"
+          (click)="openDetail(app)">
+          Detalles
+        </button>
+
+        <div class="input-group input-group-sm mt-1">
+          <input
+            type="number"
+            class="form-control"
+            placeholder="Contraoferta GTQ"
+            [(ngModel)]="counterOfferValues[app.loanApplicationId]">
+          <button
+            class="btn btn-primary"
+            (click)="sendCounterOffer(app)"
+            [disabled]="app.status !== 'PENDING'">
+            Contraofertar
+          </button>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

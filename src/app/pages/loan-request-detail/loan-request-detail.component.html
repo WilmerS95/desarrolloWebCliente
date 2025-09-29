@@ -1,0 +1,77 @@
+<div class="container my-4" *ngIf="!loading && request">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white text-center">
+      <h3 class="mb-0">Detalle de Solicitud #{{ request.loanApplicationId }}</h3>
+    </div>
+    <div class="card-body">
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <p><strong>Artículo:</strong> {{ request.itemName }}</p>
+          <p><strong>Marca:</strong> {{ request.brand }}</p>
+          <p><strong>Pagos:</strong> {{ request.quantityPayments }}</p>
+        </div>
+        <div class="col-md-6">
+          <p><strong>Fecha:</strong> {{ request.applicationDate | date:'short' }}</p>
+          <p><strong>Estado:</strong>
+            <span class="badge"
+                  [ngClass]="{
+                'bg-secondary': request.status==='PENDING',
+                'bg-success': request.status==='ACCEPTED',
+                'bg-danger': request.status==='REJECTED',
+                'bg-warning text-dark': request.status==='COUNTER_OFFERED'
+              }">{{ request.status }}
+            </span>
+          </p>
+        </div>
+      </div>
+
+      <h5 class="mb-3">Fotos</h5>
+      <div class="d-flex flex-wrap gap-2">
+        <img *ngFor="let url of request.photoUrls"
+             [src]="url"
+             alt="foto"
+             class="thumb img-thumbnail"
+             (click)="openImage(url)">
+      </div>
+
+      <div class="mt-4">
+        <label class="form-label fw-semibold">Comentario para el cliente:</label>
+        <textarea class="form-control mb-3"
+                  rows="3"
+                  placeholder="Ingrese un comentario"
+                  [(ngModel)]="comment"></textarea>
+
+        <div class="d-flex flex-wrap gap-2">
+          <button class="btn btn-success"
+                  (click)="accept(request)"
+                  [disabled]="request.status!=='PENDING'">Aceptar</button>
+
+          <button class="btn btn-danger"
+                  (click)="reject(request)"
+                  [disabled]="request.status!=='PENDING'">Rechazar</button>
+
+          <div class="input-group w-auto">
+            <input type="number"
+                   class="form-control"
+                   placeholder="Contraoferta GTQ"
+                   [(ngModel)]="counterOfferValue">
+            <button class="btn btn-primary"
+                    (click)="sendCounterOffer(request)"
+                    [disabled]="request.status!=='PENDING'">
+              Contraofertar
+            </button>
+          </div>
+
+          <button class="btn btn-outline-primary ms-auto"
+                  (click)="goToAll()">
+            Ver todas las solicitudes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" *ngIf="selectedImage" (click)="selectedImage=null">
+    <img [src]="selectedImage" class="modal-image" alt="imagen completa">
+  </div>
+</div>

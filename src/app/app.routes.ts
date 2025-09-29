@@ -7,6 +7,8 @@ import { StoreComponent } from './pages/store/store.component';
 import { LoanApplicationComponent } from './pages/loan-application/loan-application.component';
 import { RolesComponent } from './pages/roles/roles.component';
 import { UsersManagementComponent } from './pages/users-management/users-management.component';
+import { LoanRequestsComponent} from './pages/loan-requests/loan-requests.component';
+import { LoanRequestDetailComponent} from './pages/loan-request-detail/loan-request-detail.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'store', pathMatch: 'full' },
@@ -18,5 +20,8 @@ export const routes: Routes = [
   { path: 'loan-application', component: LoanApplicationComponent },
   { path: 'roles', component: RolesComponent },
   { path: 'admin-users', component: UsersManagementComponent },
+  { path: 'admin/solicitudes', component: LoanRequestsComponent },
+  { path: 'admin/solicitudes/all', component: LoanRequestsComponent },
+  { path: 'admin/solicitudes/:id', component: LoanRequestDetailComponent },
   { path: '**', redirectTo: 'store' }
 ];
