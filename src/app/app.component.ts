@@ -154,6 +154,10 @@ export class AppComponent {
     this.router.navigate(['/register']);
   }
 
+  goToPawnRequests(){
+    this.router.navigate(['/admin/solicitudes']);
+  }
+
   logout() {
     Swal.fire({
       icon: 'warning',

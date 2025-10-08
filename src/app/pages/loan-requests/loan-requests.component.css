@@ -1,11 +1,27 @@
 .container {
+  background: #fff;
   margin-top: 1rem;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   padding-bottom: 6rem;
 }
+
+h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.btn {
+  border-radius: 6px;
+}
+
 
 .table {
   width: 100%;
   border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 .table th {
@@ -25,6 +41,28 @@
 .photo-preview {
   width: 80px;
   height: auto;
-  border-radius: 4px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #ddd;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.badge {
+  font-size: 0.85rem;
+  padding: 0.4em 0.6em;
+  border-radius: 0.5em;
+}
+
+.actions-cell {
+  width: 250px;
+}
+
+.btn[disabled],
+button[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.input-group input {
+  min-width: 80px;
 }

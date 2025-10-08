@@ -20,15 +20,18 @@ export class LoanAdminService {
   }
 
   accept(id: number): Observable<any> {
-    return this.http.post(`${this.urlBase}/accept/${id}`, {});
+    return this.http.put(`${this.urlBase}/accept/${id}`, {});
   }
 
-  reject(id: number): Observable<any> {
-    return this.http.post(`${this.urlBase}/reject/${id}`, {});
+  reject(id: number, comment: string): Observable<any> {
+    return this.http.put(`${this.urlBase}/reject/${id}`, { comment });
   }
 
-  counterOffer(id: number, amount: number): Observable<any> {
-    return this.http.post(`${this.urlBase}/counter-offer/${id}`, { estimatedValue: amount });
+  counterOffer(id: number, amount: number, comment: string): Observable<any> {
+    return this.http.put(`${this.urlBase}/counter-offer/${id}`, {
+      estimatedValue: amount,
+      comment
+    });
   }
 
   getOne(id: number): Observable<LoanApplication> {

@@ -1,6 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent/* , HttpErrorResponse */ } from '@angular/common/http';
+import {
+  HttpInterceptor,
+  HttpRequest,
+  HttpHandler,
+  HttpEvent,
+  HttpResponse,
+  HttpErrorResponse
+} from '@angular/common/http';
 import { Observable, EMPTY } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -9,7 +17,7 @@ import Swal from 'sweetalert2';
 export class AuthInterceptor implements HttpInterceptor {
   private isHandlingExpiration = false;
 
-  constructor(private authService: AuthService, private router: Router ) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = this.authService.getToken();
@@ -19,8 +27,20 @@ export class AuthInterceptor implements HttpInterceptor {
       req.url.includes('/auth/register') ||
       req.url.includes('/auth/forgot-password') ||
       req.url.includes('/auth/') ||
-      req.url.includes('/auth/reset-password')){
-      return next.handle(req);
+      req.url.includes('/auth/reset-password')
+    ) {
+      return next.handle(req).pipe(
+        tap({
+          next: (event: HttpEvent<any>) => {
+            if (event instanceof HttpResponse) {
+              console.log(`[RESPONSE - ${req.url}]`, event.body);
+            }
+          },
+          error: (error: HttpErrorResponse) => {
+            console.error(`[ERROR - ${req.url}]`, error.message, error);
+          }
+        })
+      );
     }
 
     if (token) {
@@ -43,14 +63,35 @@ export class AuthInterceptor implements HttpInterceptor {
         return EMPTY;
       }
       const authReq = req.clone({
-        setHeaders: {
-          Authorization: `Bearer ${token}`
-        }
+        setHeaders: { Authorization: `Bearer ${token}` }
       });
-      return next.handle(authReq);
+
+      return next.handle(authReq).pipe(
+        tap({
+          next: (event: HttpEvent<any>) => {
+            if (event instanceof HttpResponse) {
+              console.log(`[RESPONSE - ${req.url}]`, event.body);
+            }
+          },
+          error: (error: HttpErrorResponse) => {
+            console.error(`[ERROR - ${req.url}]`, error.message, error);
+          }
+        })
+      );
     }
 
-    return next.handle(req);
+    return next.handle(req).pipe(
+      tap({
+        next: (event: HttpEvent<any>) => {
+          if (event instanceof HttpResponse) {
+            console.log(`[RESPONSE - ${req.url}]`, event.body);
+          }
+        },
+        error: (err: HttpErrorResponse) => {
+          console.error(`[ERROR - ${req.url}]`, err.message, err);
+        }
+      })
+    );
   }
 
   private isTokenExpired(token: string): boolean {

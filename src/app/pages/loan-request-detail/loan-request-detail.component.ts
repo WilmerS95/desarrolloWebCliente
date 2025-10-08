@@ -53,10 +53,13 @@ export class LoanRequestDetailComponent {
     if (res.isConfirmed) {
       this.loanAdminService.accept(req.loanApplicationId).subscribe({
         next: () => {
-          req.status = 'ACCEPTED';
+          req.status = 'ACEPTADO';
           Swal.fire('Aceptada', 'La solicitud ha sido aceptada.', 'success');
         },
-        error: () => Swal.fire('Error', 'No se pudo aceptar la solicitud', 'error')
+        error: (err) => {
+          console.error(err);
+          Swal.fire('Error', 'No se pudo aceptar la solicitud', 'error');
+        }
       });
     }
   }
@@ -66,53 +69,73 @@ export class LoanRequestDetailComponent {
       Swal.fire('Atención', 'Ingrese un comentario antes de rechazar', 'warning');
       return;
     }
+
     const res = await Swal.fire({
       title: '¿Rechazar solicitud?',
-      text: 'Se notificará al cliente con el comentario.',
+      text: 'Se notificará al cliente con el comentario ingresado.',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sí, rechazar',
       cancelButtonText: 'Cancelar',
       confirmButtonColor: '#dc3545'
     });
+
     if (res.isConfirmed) {
-      this.loanAdminService.reject(req.loanApplicationId).subscribe({
+      this.loanAdminService.reject(req.loanApplicationId, this.comment).subscribe({
         next: () => {
-          req.status = 'REJECTED';
-          Swal.fire('Rechazada', `Comentario: ${this.comment}`, 'info');
+          req.status = 'RECHAZADO';
+          Swal.fire('Rechazada', `Comentario enviado al cliente:\n${this.comment}`, 'info');
+          this.comment = '';
         },
-        error: () => Swal.fire('Error', 'No se pudo rechazar', 'error')
+        error: (err) => {
+          console.error(err);
+          Swal.fire('Error', 'No se pudo rechazar la solicitud', 'error');
+        }
       });
     }
   }
 
   async sendCounterOffer(req: LoanApplication) {
     if (!this.counterOfferValue || this.counterOfferValue <= 0) {
-      Swal.fire('Atención', 'Ingrese un monto válido', 'warning');
+      Swal.fire('Atención', 'Ingrese un monto válido para la contraoferta', 'warning');
       return;
     }
+
     if (!this.comment.trim()) {
       Swal.fire('Atención', 'Ingrese un comentario para la contraoferta', 'warning');
       return;
     }
+
     const res = await Swal.fire({
       title: '¿Enviar contraoferta?',
-      text: `Monto: GTQ ${this.counterOfferValue}`,
+      text: `Monto propuesto: GTQ ${this.counterOfferValue}`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonText: 'Enviar',
       cancelButtonText: 'Cancelar',
       confirmButtonColor: '#ffc107'
     });
+
     if (res.isConfirmed) {
-      this.loanAdminService.counterOffer(req.loanApplicationId, this.counterOfferValue).subscribe({
-        next: () => {
-          req.status = 'COUNTER_OFFERED';
-          req.estimatedValue = this.counterOfferValue;
-          Swal.fire('Enviada', `Nuevo monto: GTQ ${this.counterOfferValue}\nComentario: ${this.comment}`, 'success');
-        },
-        error: () => Swal.fire('Error', 'No se pudo enviar la contraoferta', 'error')
-      });
+      this.loanAdminService
+        .counterOffer(req.loanApplicationId, this.counterOfferValue, this.comment)
+        .subscribe({
+          next: () => {
+            req.status = 'CONTRA_OFERTADO';
+            req.estimatedValue = this.counterOfferValue;
+            Swal.fire(
+              'Contraoferta enviada',
+              `Monto: GTQ ${this.counterOfferValue}\nComentario: ${this.comment}`,
+              'success'
+            );
+            this.comment = '';
+          },
+          error: (err) => {
+            console.error(err);
+            Swal.fire('Error', 'No se pudo enviar la contraoferta', 'error');
+          }
+        }
+      );
     }
   }
 

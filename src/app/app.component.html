@@ -36,8 +36,8 @@
           <li><a routerLink="/settings">Configuración</a></li>
           <li *ngIf="can('UPLOAD_DOCUMENT')"><a (click)="goToPawn()">Empeñar</a></li>
           <li><a (click)="goToHistory()">Historial</a></li>
-          <li *ngIf="isAdmin">
-            <a routerLink="/pending">Pendientes</a>
+          <li *ngIf="can('VIEW_ALL_ORDERS')">
+            <a (click)="goToPawnRequests()">Solicitudes de empeño</a>
           </li>
           <li *ngIf="can('ALL_PERMISSION')">
             <a (click)="goToAdminUsers()">Administrar Usuarios</a>

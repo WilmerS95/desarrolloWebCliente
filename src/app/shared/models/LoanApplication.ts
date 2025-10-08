@@ -4,6 +4,7 @@ export interface LoanApplication {
   itemName: string;
   brand: string;
   quantityPayments: number;
+  requestedAmount: number;
   applicationDate: string;
   status: string;
   photoUrls: string[];

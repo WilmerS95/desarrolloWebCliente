@@ -21,18 +21,18 @@ export class LoanRequestsComponent implements OnInit {
     private loanAdminService: LoanAdminService,
     private route: ActivatedRoute,
     private router: Router
-    ) {}
+  ) {}
 
   ngOnInit(): void {
-      const id = this.route.snapshot.paramMap.get('id');
-      const all = this.route.snapshot.url.some(seg => seg.path === 'all');
+    const id = this.route.snapshot.paramMap.get('id');
+    const all = this.route.snapshot.url.some(seg => seg.path === 'all');
 
-      if (id && !all) {
-        this.router.navigate(['/admin/solicitudes', id]);
-      } else {
-        this.loadAll();
-      }
+    if (id && !all) {
+      this.router.navigate(['/admin/solicitudes', id]);
+    } else {
+      this.loadAll();
     }
+  }
 
   loadAll() {
     this.loading = true;
@@ -46,58 +46,100 @@ export class LoanRequestsComponent implements OnInit {
     this.router.navigate(['/admin/solicitudes', app.loanApplicationId]);
   }
 
-  loadApplications(): void {
-    this.loading = true;
-    this.loanAdminService.getAll().subscribe({
-      next: data => {
-        this.applications = data.map(app => ({
-          ...app,
-          estimatedValue: app.estimatedValue ?? 0
-        }));
-        this.loading = false;
-      },
-      error: err => {
-        console.error(err);
-        this.loading = false;
-        Swal.fire('Error', 'No se pudieron cargar las solicitudes', 'error');
+  accept(app: LoanApplication) {
+    Swal.fire({
+      title: '¿Aceptar solicitud?',
+      text: 'El cliente será notificado de la aceptación.',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, aceptar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#198754'
+    }).then(result => {
+      if (result.isConfirmed) {
+        this.loanAdminService.accept(app.loanApplicationId).subscribe({
+          next: () => {
+            Swal.fire('Aceptada', 'La solicitud fue aceptada exitosamente', 'success');
+            app.status = 'ACCEPTED';
+          },
+          error: () => Swal.fire('Error', 'No se pudo aceptar la solicitud', 'error')
+        });
       }
     });
   }
 
-  accept(app: LoanApplication) {
-    this.loanAdminService.accept(app.loanApplicationId).subscribe({
-      next: () => {
-        Swal.fire('Aceptada', 'Solicitud aceptada', 'success');
-        app.status = 'ACCEPTED';
-      },
-      error: () => Swal.fire('Error', 'No se pudo aceptar', 'error')
-    });
-  }
-
   reject(app: LoanApplication) {
-    this.loanAdminService.reject(app.loanApplicationId).subscribe({
-      next: () => {
-        Swal.fire('Rechazada', 'Solicitud rechazada', 'info');
-        app.status = 'REJECTED';
+    Swal.fire({
+      title: 'Motivo de rechazo',
+      input: 'textarea',
+      inputPlaceholder: 'Escriba el motivo del rechazo...',
+      inputValidator: (value) => {
+        if (!value) {
+          return 'Debe ingresar un motivo';
+        }
+        return null;
       },
-      error: () => Swal.fire('Error', 'No se pudo rechazar', 'error')
+      showCancelButton: true,
+      confirmButtonText: 'Rechazar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#dc3545'
+    }).then(result => {
+      if (result.isConfirmed && result.value) {
+        const motivo = result.value;
+        this.loanAdminService.reject(app.loanApplicationId, motivo).subscribe({
+          next: () => {
+            Swal.fire('Rechazada', 'Solicitud rechazada y comentario enviado al cliente', 'info');
+            app.status = 'REJECTED';
+          },
+          error: (err) => {
+            console.error(err);
+            Swal.fire('Error', err.error?.error || 'No se pudo rechazar la solicitud', 'error');
+          }
+        });
+      }
     });
   }
 
   sendCounterOffer(app: LoanApplication) {
-    const amount = this.counterOfferValues[app.loanApplicationId];
-    if (!amount || amount <= 0) {
-      Swal.fire('Atención', 'Ingrese un monto válido', 'warning');
-      return;
-    }
+    Swal.fire({
+      title: 'Nueva contraoferta',
+      html: `
+        <input id="counterAmount" type="number" class="swal2-input" placeholder="Monto (GTQ)">
+        <textarea id="counterComment" class="swal2-textarea" placeholder="Motivo o comentario..."></textarea>
+      `,
+      focusConfirm: false,
+      showCancelButton: true,
+      confirmButtonText: 'Enviar',
+      cancelButtonText: 'Cancelar',
+      preConfirm: () => {
+        const amount = (document.getElementById('counterAmount') as HTMLInputElement).value;
+        const comment = (document.getElementById('counterComment') as HTMLTextAreaElement).value;
+        if (!amount || parseFloat(amount) <= 0) {
+          Swal.showValidationMessage('Ingrese un monto válido');
+          return false;
+        }
+        if (!comment) {
+          Swal.showValidationMessage('Debe ingresar un comentario');
+          return false;
+        }
+        return { amount: parseFloat(amount), comment };
+      }
+    }).then(result => {
+      if (result.isConfirmed && result.value) {
+        const { amount, comment } = result.value;
 
-    this.loanAdminService.counterOffer(app.loanApplicationId, amount).subscribe({
-      next: () => {
-        app.status = 'COUNTER_OFFERED';
-        app.estimatedValue = amount;
-        Swal.fire('Contraoferta enviada', `Nuevo monto: GTQ ${amount}`, 'success');
-      },
-      error: () => Swal.fire('Error', 'No se pudo enviar la contraoferta', 'error')
+        this.loanAdminService.counterOffer(app.loanApplicationId, amount, comment).subscribe({
+          next: () => {
+            Swal.fire('Contraoferta enviada', `Nuevo monto: GTQ ${amount}`, 'success');
+            app.status = 'COUNTER_OFFERED';
+            app.estimatedValue = amount;
+          },
+          error: (err) => {
+            console.error(err);
+            Swal.fire('Error', err.error?.error || 'No se pudo enviar la contraoferta', 'error');
+          }
+        });
+      }
     });
   }
 }

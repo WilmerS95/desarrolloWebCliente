@@ -9,16 +9,17 @@
           <p><strong>Artículo:</strong> {{ request.itemName }}</p>
           <p><strong>Marca:</strong> {{ request.brand }}</p>
           <p><strong>Pagos:</strong> {{ request.quantityPayments }}</p>
+          <p><strong>Monto:</strong> {{ request.requestedAmount | currency:'GTQ':'symbol':'1.2-2':'es-GT' }} </p>
         </div>
         <div class="col-md-6">
           <p><strong>Fecha:</strong> {{ request.applicationDate | date:'short' }}</p>
           <p><strong>Estado:</strong>
             <span class="badge"
                   [ngClass]="{
-                'bg-secondary': request.status==='PENDING',
-                'bg-success': request.status==='ACCEPTED',
-                'bg-danger': request.status==='REJECTED',
-                'bg-warning text-dark': request.status==='COUNTER_OFFERED'
+                'bg-secondary': request.status==='PENDIENTE',
+                'bg-success': request.status==='ACEPTADO',
+                'bg-danger': request.status==='RECHAZADO',
+                'bg-warning text-dark': request.status==='CONTRA_OFERTADO'
               }">{{ request.status }}
             </span>
           </p>
@@ -44,23 +45,23 @@
         <div class="d-flex flex-wrap gap-2">
           <button class="btn btn-success"
                   (click)="accept(request)"
-                  [disabled]="request.status!=='PENDING'">Aceptar</button>
+                  [disabled]="request.status!=='PENDIENTE'">Aceptar</button>
 
           <button class="btn btn-danger"
                   (click)="reject(request)"
-                  [disabled]="request.status!=='PENDING'">Rechazar</button>
+                  [disabled]="request.status!=='PENDIENTE'">Rechazar</button>
 
-          <div class="input-group w-auto">
+          <!--<div class="input-group w-auto">
             <input type="number"
                    class="form-control"
                    placeholder="Contraoferta GTQ"
                    [(ngModel)]="counterOfferValue">
             <button class="btn btn-primary"
                     (click)="sendCounterOffer(request)"
-                    [disabled]="request.status!=='PENDING'">
+                    [disabled]="request.status!=='PENDIENTE'">
               Contraofertar
             </button>
-          </div>
+          </div>-->
 
           <button class="btn btn-outline-primary ms-auto"
                   (click)="goToAll()">
