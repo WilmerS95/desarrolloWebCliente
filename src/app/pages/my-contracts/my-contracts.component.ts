@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 import { LoanContractService, LoanContract } from '../../services/loan-contract.service';
 
 
@@ -15,7 +16,7 @@ export class MyContractsComponent implements OnInit {
   contracts: LoanContract[] = [];
   loading = true;
 
-  constructor(private contractService: LoanContractService) {}
+  constructor(private contractService: LoanContractService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadContracts();
@@ -49,4 +50,15 @@ export class MyContractsComponent implements OnInit {
     return (paid / total) * 100;
   }
 
+  /* viewContract(loanApplicationId: number): void {
+    this.contractService.openContractInNewWindow(loanApplicationId);
+  } */
+
+  goToContractDetail(loanApplicationId: number): void {
+      this.router.navigate(['/my-contracts', loanApplicationId]);
+    }
+
+  viewContract(loanApplicationId: number): void {
+    this.contractService.openContractInNewWindow(loanApplicationId);
+  }
 }
