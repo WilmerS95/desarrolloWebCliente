@@ -9,6 +9,10 @@ import { RolesComponent } from './pages/roles/roles.component';
 import { UsersManagementComponent } from './pages/users-management/users-management.component';
 import { LoanRequestsComponent} from './pages/loan-requests/loan-requests.component';
 import { LoanRequestDetailComponent} from './pages/loan-request-detail/loan-request-detail.component';
+import { InstallmentAcceptanceComponent } from './pages/installment-acceptance/installment-acceptance.component';
+import { authGuard } from './auth/guards/auth.guard';
+import { parameterAdminGuard } from './auth/guards/parameter-admin.guard';
+import { BusinessParametersComponent } from './pages/business-parameters/business-parameters.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'store', pathMatch: 'full' },
@@ -23,5 +27,7 @@ export const routes: Routes = [
   { path: 'admin/solicitudes', component: LoanRequestsComponent },
   { path: 'admin/solicitudes/all', component: LoanRequestsComponent },
   { path: 'admin/solicitudes/:id', component: LoanRequestDetailComponent },
+  { path: 'loan-application/:id/accept', component: InstallmentAcceptanceComponent},
+  { path: 'business-parameters', component: BusinessParametersComponent, canActivate: [parameterAdminGuard]},
   { path: '**', redirectTo: 'store' }
 ];

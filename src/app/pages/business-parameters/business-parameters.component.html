@@ -1,0 +1,369 @@
+<div class="container-fluid mt-4">
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h2 class="mb-0">
+            <i class="bi bi-gear-fill text-primary"></i>
+            Parámetros del Negocio
+          </h2>
+          <p class="text-muted mb-0">Gestiona los parámetros configurables del sistema</p>
+        </div>
+        <button
+          *ngIf="canEdit()"
+          class="btn btn-success"
+          (click)="openCreateForm()">
+          <i class="bi bi-plus-circle"></i> Nuevo Parámetro
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-3 shadow-sm">
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label fw-bold">
+            <i class="bi bi-funnel"></i> Filtrar por categoría
+          </label>
+          <select
+            class="form-select"
+            [(ngModel)]="selectedCategory"
+            (change)="onCategoryChange()">
+            <option value="ALL">Todas las categorías</option>
+            <option *ngFor="let cat of categories" [value]="cat">
+              {{ getCategoryName(cat) }}
+            </option>
+          </select>
+        </div>
+        <div class="col-md-8">
+          <label class="form-label fw-bold">
+            <i class="bi bi-search"></i> Buscar
+          </label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Buscar por nombre, descripción o valor..."
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="onSearchChange()">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="loading && !editingParam" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2 text-muted">Cargando parámetros...</p>
+  </div>
+
+  <div class="card shadow-sm" *ngIf="!loading || editingParam">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-dark">
+          <tr>
+            <th width="5%">ID</th>
+            <th width="20%">Nombre</th>
+            <th width="15%">Valor</th>
+            <th width="25%">Descripción</th>
+            <th width="10%">Categoría</th>
+            <th width="10%">Tipo</th>
+            <th width="10%">Modificado por</th>
+            <th width="5%"></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let param of filteredParameters"
+              [class.table-warning]="editingParam?.parameterId === param.parameterId">
+            <td>{{ param.parameterId }}</td>
+
+            <td>
+              <code class="bg-light px-2 py-1 rounded">{{ param.name }}</code>
+            </td>
+
+            <td>
+              <div *ngIf="editingParam?.parameterId !== param.parameterId">
+                <strong class="text-primary">{{ param.value }}</strong>
+              </div>
+              <div *ngIf="editingParam?.parameterId === param.parameterId">
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  [(ngModel)]="tempValue"
+                  (keyup.enter)="saveEdit()"
+                  (keyup.escape)="cancelEdit()"
+                  placeholder="Nuevo valor">
+                <input
+                  type="text"
+                  class="form-control form-control-sm mt-1"
+                  [(ngModel)]="editReason"
+                  placeholder="Motivo del cambio (opcional)">
+              </div>
+            </td>
+            <td>
+              <small class="text-muted">{{ param.description }}</small>
+            </td>
+
+            <td>
+                <span
+                  class="badge"
+                  [ngClass]="getCategoryBadgeClass(param.category)">
+                  {{ getCategoryName(param.category) }}
+                </span>
+            </td>
+
+            <td>
+                <span class="badge bg-light text-dark border">
+                  {{ getDataTypeName(param.dataType) }}
+                </span>
+            </td>
+
+            <td>
+              <small>
+                <i class="bi bi-person-circle"></i>
+                {{ param.changedBy }}
+              </small>
+            </td>
+
+            <td>
+              <div class="btn-group btn-group-sm" role="group">
+                <div *ngIf="editingParam?.parameterId !== param.parameterId && canEdit()">
+                  <button
+                    class="btn btn-outline-warning"
+                    (click)="startEdit(param)"
+                    title="Editar">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button
+                    class="btn btn-outline-info"
+                    (click)="viewHistory(param)"
+                    title="Ver historial">
+                    <i class="bi bi-clock-history"></i>
+                  </button>
+                  <button
+                    *ngIf="canDelete()"
+                    class="btn btn-outline-danger"
+                    (click)="deleteParameter(param)"
+                    title="Desactivar">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+
+                <div *ngIf="editingParam?.parameterId === param.parameterId">
+                  <button
+                    class="btn btn-success"
+                    (click)="saveEdit()"
+                    [disabled]="loading"
+                    title="Guardar">
+                    <i class="bi bi-check-lg"></i>
+                  </button>
+                  <button
+                    class="btn btn-secondary"
+                    (click)="cancelEdit()"
+                    [disabled]="loading"
+                    title="Cancelar">
+                    <i class="bi bi-x-lg"></i>
+                  </button>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <tr *ngIf="filteredParameters.length === 0 && !loading">
+            <td colspan="8" class="text-center py-4 text-muted">
+              <i class="bi bi-inbox display-4 d-block mb-2"></i>
+              No se encontraron parámetros
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card-footer text-muted">
+      <small>
+        <i class="bi bi-list-ul"></i>
+        Mostrando {{ filteredParameters.length }} de {{ parameters.length }} parámetros
+      </small>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade show d-block"
+     *ngIf="showCreateForm"
+     tabindex="-1"
+     style="background-color: rgba(0,0,0,0.5);">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title">
+          <i class="bi bi-plus-circle"></i> Crear Nuevo Parámetro
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          (click)="closeCreateForm()"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-bold">Nombre *</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="newParameter.name"
+                name="name"
+                placeholder="NOMBRE_PARAMETRO"
+                required>
+              <small class="text-muted">Use mayúsculas y guiones bajos</small>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-bold">Valor *</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="newParameter.value"
+                name="value"
+                placeholder="Valor del parámetro"
+                required>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Descripción</label>
+            <textarea
+              class="form-control"
+              [(ngModel)]="newParameter.description"
+              name="description"
+              rows="2"
+              placeholder="Descripción del parámetro"></textarea>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-bold">Categoría *</label>
+              <select
+                class="form-select"
+                [(ngModel)]="newParameter.category"
+                name="category"
+                required>
+                <option *ngFor="let cat of categories" [value]="cat">
+                  {{ getCategoryName(cat) }}
+                </option>
+              </select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-bold">Tipo de Dato *</label>
+              <select
+                class="form-select"
+                [(ngModel)]="newParameter.dataType"
+                name="dataType"
+                required>
+                <option value="STRING">Texto</option>
+                <option value="INTEGER">Número entero</option>
+                <option value="DECIMAL">Decimal</option>
+                <option value="BOOLEAN">Booleano</option>
+                <option value="DATE">Fecha</option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeCreateForm()">
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn-success"
+          (click)="createParameter()"
+          [disabled]="!newParameter.name || !newParameter.value">
+          <i class="bi bi-check-lg"></i> Crear Parámetro
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade show d-block"
+     *ngIf="showHistoryModal"
+     tabindex="-1"
+     style="background-color: rgba(0,0,0,0.5);">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header bg-info text-white">
+        <h5 class="modal-title">
+          <i class="bi bi-clock-history"></i> Historial de Cambios
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          (click)="closeHistoryModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="table table-striped table-sm">
+            <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Acción</th>
+              <th>Valor Anterior</th>
+              <th>Valor Nuevo</th>
+              <th>Modificado por</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let hist of selectedParameterHistory">
+              <td>
+                <small>{{ hist.changedAt | date:'dd/MM/yyyy HH:mm' }}</small>
+              </td>
+              <td>
+                  <span
+                    class="badge"
+                    [ngClass]="getActionBadgeClass(hist.action)">
+                    {{ hist.action }}
+                  </span>
+              </td>
+              <td>
+                <code *ngIf="hist.oldValue" class="bg-light px-2 py-1">{{ hist.oldValue }}</code>
+                <span *ngIf="!hist.oldValue" class="text-muted">-</span>
+              </td>
+              <td>
+                <code *ngIf="hist.newValue" class="bg-light px-2 py-1">{{ hist.newValue }}</code>
+                <span *ngIf="!hist.newValue" class="text-muted">-</span>
+              </td>
+              <td>
+                <small>
+                  <i class="bi bi-person-circle"></i> {{ hist.changedBy }}
+                </small>
+              </td>
+            </tr>
+            <tr *ngIf="selectedParameterHistory.length === 0">
+              <td colspan="5" class="text-center text-muted py-4">
+                <i class="bi bi-info-circle display-6 d-block mb-2"></i>
+                No hay historial de cambios para este parámetro
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeHistoryModal()">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

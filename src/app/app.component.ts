@@ -158,6 +158,15 @@ export class AppComponent {
     this.router.navigate(['/admin/solicitudes']);
   }
 
+  canAccessParameters(): boolean {
+    return this.authService.hasPermission('MANAGE_PARAMETERS') ||
+      this.authService.isAdmin();
+  }
+
+  goToParameters() {
+    this.router.navigate(['/business-parameters']);
+  }
+
   logout() {
     Swal.fire({
       icon: 'warning',

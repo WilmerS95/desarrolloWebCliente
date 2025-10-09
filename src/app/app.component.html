@@ -39,6 +39,11 @@
           <li *ngIf="can('VIEW_ALL_ORDERS')">
             <a (click)="goToPawnRequests()">Solicitudes de empeño</a>
           </li>
+          <li class="nav-item" *ngIf="canAccessParameters()">
+            <a class="nav-link" (click)="goToParameters()" style="cursor: pointer;">
+              <i class="bi bi-gear-fill"></i> Parámetros
+            </a>
+          </li>
           <li *ngIf="can('ALL_PERMISSION')">
             <a (click)="goToAdminUsers()">Administrar Usuarios</a>
           </li>

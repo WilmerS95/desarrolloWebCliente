@@ -28,7 +28,7 @@ export class LoanApplicationComponent implements OnInit {
       specification: [''],
       categoryId: ['', Validators.required],
       quantityPayments: [1, [Validators.required, Validators.min(1)]],
-      estimatedValue: [0, [Validators.min(0)]]
+      requestedAmount: [0, [Validators.required, Validators.min(1)]]
     });
 
     this.loanService.getCategories().subscribe({
