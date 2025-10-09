@@ -11,9 +11,9 @@ export class LoanAdminService {
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-    private get urlBase(): string {
-      return this.authService.getBaseUrl() + '/loan-applications';
-    }
+  private get urlBase(): string {
+    return this.authService.getBaseUrl() + '/loan-applications';
+  }
 
   getAll(): Observable<LoanApplication[]> {
     return this.http.get<LoanApplication[]>(`${this.urlBase}/admin/all`);

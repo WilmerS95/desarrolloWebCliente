@@ -127,7 +127,11 @@ export class AppComponent {
     }
 
   goToHistory() {
-    this.router.navigate(['/history']);
+    this.router.navigate(['/loan-history']);
+  }
+
+  goToContracts() {
+    this.router.navigate(['/my-contracts'])
   }
 
   goToLogin() {
@@ -156,11 +160,6 @@ export class AppComponent {
 
   goToPawnRequests(){
     this.router.navigate(['/admin/solicitudes']);
-  }
-
-  canAccessParameters(): boolean {
-    return this.authService.hasPermission('MANAGE_PARAMETERS') ||
-      this.authService.isAdmin();
   }
 
   goToParameters() {

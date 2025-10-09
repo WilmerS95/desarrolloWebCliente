@@ -13,6 +13,9 @@ import { InstallmentAcceptanceComponent } from './pages/installment-acceptance/i
 import { authGuard } from './auth/guards/auth.guard';
 import { parameterAdminGuard } from './auth/guards/parameter-admin.guard';
 import { BusinessParametersComponent } from './pages/business-parameters/business-parameters.component';
+import { LoanHistoryComponent } from './pages/loan-history/loan-history.component';
+import { LoanHistoryDetailComponent } from './pages/loan-history-detail/loan-history-detail.component';
+import { MyContractsComponent } from './pages/my-contracts/my-contracts.component'
 
 export const routes: Routes = [
   { path: '', redirectTo: 'store', pathMatch: 'full' },
@@ -29,5 +32,9 @@ export const routes: Routes = [
   { path: 'admin/solicitudes/:id', component: LoanRequestDetailComponent },
   { path: 'loan-application/:id/accept', component: InstallmentAcceptanceComponent},
   { path: 'business-parameters', component: BusinessParametersComponent, canActivate: [parameterAdminGuard]},
+  { path: 'loan-history', component: LoanHistoryComponent, canActivate: [authGuard] },
+  { path: 'loan-history/:id', component: LoanHistoryDetailComponent, canActivate: [authGuard]},
+  { path: 'my-contracts', component: MyContractsComponent, canActivate: [authGuard] },
+  //{ path: 'my-contracts/:id', component: ContractDetailComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: 'store' }
 ];
