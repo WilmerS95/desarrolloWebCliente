@@ -28,40 +28,81 @@
 
       <ul class="dropdown-menu-custom" *ngIf="dropdownOpen">
         <ng-container *ngIf="!isLoggedIn()">
-          <li><a (click)="goToLogin()">Iniciar sesión</a></li>
-          <li><a (click)="goToRegister()">Registrarse</a></li>
+          <li>
+            <a (click)="goToLogin()">
+              <i class="bi bi-box-arrow-in-right me-2"></i>
+              Iniciar sesión
+            </a>
+          </li>
+          <li>
+            <a (click)="goToRegister()">
+              <i class="bi bi-person-plus me-2"></i>
+              Registrarse
+            </a>
+          </li>
         </ng-container>
         <ng-container *ngIf="isLoggedIn()">
-          <li *ngIf="can('EDIT_PROFILE')"><a routerLink="/profile">Perfil</a></li>
-          <li><a routerLink="/settings">Configuración</a></li>
-          <li *ngIf="can('UPLOAD_DOCUMENT')"><a (click)="goToPawn()">Empeñar</a></li>
-          <li><a (click)="goToHistory()">Historial</a></li>
+          <li *ngIf="can('EDIT_PROFILE')">
+            <a routerLink="/profile">
+              <i class="bi bi-person-badge me-2"></i>
+              Perfil
+            </a>
+          </li>
+          <li>
+            <a routerLink="/settings">
+              <i class="bi bi-gear me-2"></i>
+              Configuración
+            </a>
+          </li>
+          <li *ngIf="can('UPLOAD_DOCUMENT')">
+            <a (click)="goToPawn()">
+              <i class="bi bi-gem me-2"></i>
+              Empeñar
+            </a>
+          </li>
           <li *ngIf="can('VIEW_ALL_ORDERS')">
-            <a (click)="goToPawnRequests()">Solicitudes de empeño</a>
+            <a (click)="goToPawnRequests()">
+              <i class="bi bi-inbox-fill me-2"></i>
+              Solicitudes de empeño
+            </a>
           </li>
           <li class="nav-item" *ngIf="can('VIEW_HISTORY')">
             <a class="nav-link" (click)="goToHistory()" style="cursor: pointer;">
-              <i class="bi bi-clock-history"></i> Mi Historial
+              <i class="bi bi-clock-history me-2"></i>
+              Mi Historial
             </a>
           </li>
           <li class="nav-item" *ngIf="can('VIEW_HISTORY')">
             <a class="nav-link"(click)="goToContracts()" style="cursor: pointer;">
-              <i class="bi bi-file-earmark-text"></i> Mis Contratos
+              <i class="bi bi-file-earmark-text me-2"></i>
+              Mis Contratos
             </a>
           </li>
           <li class="nav-item" *ngIf="can('MANAGE_PARAMETERS')">
             <a class="nav-link" (click)="goToParameters()" style="cursor: pointer;">
-              <i class="bi bi-gear-fill"></i> Parámetros
+              <i class="bi bi-sliders me-2"></i>
+              Parámetros
             </a>
           </li>
           <li *ngIf="can('ALL_PERMISSION')">
-            <a (click)="goToAdminUsers()">Administrar Usuarios</a>
+            <a (click)="goToAdminUsers()">
+              <i class="bi bi-people-fill me-2"></i>
+              Administrar Usuarios
+            </a>
           </li>
           <li *ngIf="can('ALL_PERMISSION')">
-            <a (click)="goToRoles()">Administrar Roles</a>
+            <a (click)="goToRoles()">
+              <i class="bi bi-shield-check me-2"></i>
+              Administrar Roles
+            </a>
           </li>
           <li class="divider"></li>
-          <li><a class="text-danger" (click)="logout()">Cerrar sesión</a></li>
+          <li>
+            <a class="text-danger" (click)="logout()">
+              <i class="bi bi-box-arrow-right me-2"></i>
+              Cerrar sesión
+            </a>
+          </li>
         </ng-container>
       </ul>
     </div>
@@ -77,8 +118,14 @@
     <p>
       <img src="/empeños.png" alt="Logo del negocio" class="footer-logo"/>
       © {{ currentYear }} 036 - Desarrollo Web |
-      <a href="#" (click)="showPrivacyPolicy($event)">Política de Privacidad</a> |
-      <a href="#" (click)="showTerms($event)">Términos y Condiciones</a>
+      <a href="#" (click)="showPrivacyPolicy($event)">
+        <i class="bi bi-shield-lock me-1"></i>
+        Política de Privacidad
+      </a> |
+      <a href="#" (click)="showTerms($event)">
+        <i class="bi bi-file-text me-1"></i>
+        Términos y Condiciones
+      </a>
     </p>
   </div>
 </footer>
