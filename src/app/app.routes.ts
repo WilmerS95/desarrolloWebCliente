@@ -7,8 +7,8 @@ import { StoreComponent } from './pages/store/store.component';
 import { LoanApplicationComponent } from './pages/loan-application/loan-application.component';
 import { RolesComponent } from './pages/roles/roles.component';
 import { UsersManagementComponent } from './pages/users-management/users-management.component';
-import { LoanRequestsComponent} from './pages/loan-requests/loan-requests.component';
-import { LoanRequestDetailComponent} from './pages/loan-request-detail/loan-request-detail.component';
+import { LoanRequestsComponent } from './pages/loan-requests/loan-requests.component';
+import { LoanRequestDetailComponent } from './pages/loan-request-detail/loan-request-detail.component';
 import { InstallmentAcceptanceComponent } from './pages/installment-acceptance/installment-acceptance.component';
 import { authGuard } from './auth/guards/auth.guard';
 import { parameterAdminGuard } from './auth/guards/parameter-admin.guard';
@@ -30,10 +30,10 @@ export const routes: Routes = [
   { path: 'admin/solicitudes', component: LoanRequestsComponent },
   { path: 'admin/solicitudes/all', component: LoanRequestsComponent },
   { path: 'admin/solicitudes/:id', component: LoanRequestDetailComponent },
-  { path: 'loan-application/:id/accept', component: InstallmentAcceptanceComponent},
-  { path: 'business-parameters', component: BusinessParametersComponent, canActivate: [parameterAdminGuard]},
+  { path: 'loan-application/:id/accept', component: InstallmentAcceptanceComponent },
+  { path: 'business-parameters', component: BusinessParametersComponent, canActivate: [parameterAdminGuard] },
   { path: 'loan-history', component: LoanHistoryComponent, canActivate: [authGuard] },
-  { path: 'loan-history/:id', component: LoanHistoryDetailComponent, canActivate: [authGuard]},
+  { path: 'loan-history/:id', component: LoanHistoryDetailComponent, canActivate: [authGuard] },
   { path: 'my-contracts', component: MyContractsComponent, canActivate: [authGuard] },
   //{ path: 'my-contracts/:id', component: ContractDetailComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: 'store' }
