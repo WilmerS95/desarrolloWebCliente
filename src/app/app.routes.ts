@@ -16,6 +16,9 @@ import { BusinessParametersComponent } from './pages/business-parameters/busines
 import { LoanHistoryComponent } from './pages/loan-history/loan-history.component';
 import { LoanHistoryDetailComponent } from './pages/loan-history-detail/loan-history-detail.component';
 import { MyContractsComponent } from './pages/my-contracts/my-contracts.component'
+import { AccountStatementComponent } from './pages/account-statement/account-statement.component'
+import { ReportPaymentComponent } from './pages/report-payment/report-payment.component'
+import { ReviewPaymentsComponent } from './pages/review-payments/review-payments.component'
 
 export const routes: Routes = [
   { path: '', redirectTo: 'store', pathMatch: 'full' },
@@ -35,6 +38,9 @@ export const routes: Routes = [
   { path: 'loan-history', component: LoanHistoryComponent, canActivate: [authGuard] },
   { path: 'loan-history/:id', component: LoanHistoryDetailComponent, canActivate: [authGuard] },
   { path: 'my-contracts', component: MyContractsComponent, canActivate: [authGuard] },
+  { path: 'account-statement', component: AccountStatementComponent },
+  { path: 'report-payment', component: ReportPaymentComponent },
+  { path: 'review-payments', component: ReviewPaymentsComponent },
   //{ path: 'my-contracts/:id', component: ContractDetailComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: 'store' }
 ];

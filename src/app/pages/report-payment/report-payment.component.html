@@ -1,0 +1,68 @@
+<div class="container mt-4">
+  <h2>Reportar Pago</h2>
+
+  <div class="card mt-3">
+    <div class="card-body">
+      <form (ngSubmit)="onSubmit()">
+
+        <div class="mb-3">
+          <label class="form-label">Préstamo *</label>
+          <select class="form-control" [(ngModel)]="payment.loanId" name="loanId" required>
+            <option value="">Seleccione un préstamo</option>
+            <option *ngFor="let loan of userLoans" [value]="loan.loanId">
+              Préstamo #{{loan.loanId}} - {{loan.itemName}}
+            </option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Número de Pago *</label>
+          <input type="number" class="form-control"
+                 [(ngModel)]="payment.paymentNumber"
+                 name="paymentNumber"
+                 min="1"
+                 required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Monto Pagado (GTQ) *</label>
+          <input type="number" class="form-control"
+                 [(ngModel)]="payment.amountPaid"
+                 name="amountPaid"
+                 step="0.01"
+                 min="0"
+                 required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Método de Pago *</label>
+          <select class="form-control" [(ngModel)]="payment.paymentMethod" name="paymentMethod" required>
+            <option value="">Seleccione método</option>
+            <option value="TRANSFERENCIA">Transferencia Bancaria</option>
+            <option value="DEPOSITO">Depósito en Efectivo</option>
+            <option value="CHEQUE">Cheque</option>
+            <option value="EFECTIVO">Efectivo</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Comprobante de Pago *</label>
+          <input type="file" class="form-control"
+                 (change)="onFileSelected($event)"
+                 accept="image/*"
+                 required>
+          <small class="text-muted">Formatos aceptados: JPG, PNG</small>
+        </div>
+
+        <div class="mb-3" *ngIf="imagePreview">
+          <img [src]="imagePreview" class="img-thumbnail" style="max-width: 300px;">
+        </div>
+
+        <button type="submit" class="btn btn-primary" [disabled]="loading || !isFormValid()">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+          {{ loading ? 'Enviando...' : 'Reportar Pago' }}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

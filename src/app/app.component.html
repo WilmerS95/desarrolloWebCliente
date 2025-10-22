@@ -54,6 +54,21 @@
               Configuración
             </a>
           </li>
+          <li>
+            <a (click)="goToAccountStatement()">
+              AccountStatement
+            </a>
+          </li>
+          <li>
+            <a (click)="goToReportPayment()">
+              Reporte de pagos
+            </a>
+          </li>
+          <li>
+            <a (click)="goToReviewPayments()">
+              Revisar Pagos
+            </a>
+          </li>
           <li *ngIf="can('UPLOAD_DOCUMENT')">
             <a (click)="goToPawn()">
               <i class="bi bi-gem me-2"></i>

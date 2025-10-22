@@ -130,6 +130,18 @@ export class AppComponent {
     this.router.navigate(['/loan-history']);
   }
 
+  goToAccountStatement(){
+    this.router.navigate(['/account-statement'])
+  }
+
+  goToReportPayment(){
+    this.router.navigate(['/report-payment'])
+  }
+
+  goToReviewPayments(){
+    this.router.navigate(['review-payments'])
+  }
+
   goToContracts() {
     this.router.navigate(['/my-contracts'])
   }

@@ -1,0 +1,152 @@
+<div class="container mt-4">
+  <h2>Estado de Cuenta</h2>
+
+  <div *ngIf="loading" class="text-center mt-4">
+    <div class="spinner-border"></div>
+    <p>Cargando estado de cuenta...</p>
+  </div>
+
+  <div *ngIf="!loading && statement">
+    <!-- Resumen del Préstamo -->
+    <div class="card mt-3">
+      <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Resumen del Préstamo #{{statement.loanId}}</h4>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <p><strong>Artículo:</strong> {{statement.itemName}}</p>
+            <p><strong>Estado:</strong>
+              <span class="badge" [ngClass]="{
+                    'bg-success': statement.status === 'ACTIVE',
+                    'bg-info': statement.status === 'PAID',
+                    'bg-danger': statement.status === 'DEFAULTED'
+                  }">{{statement.status}}</span>
+            </p>
+          </div>
+          <div class="col-md-6">
+            <p><strong>Monto del Préstamo:</strong> {{statement.loanAmount | currency:'GTQ':'symbol':'1.2-2':'es-GT'}}</p>
+            <p><strong>Interés Total:</strong> {{statement.totalInterest | currency:'GTQ':'symbol':'1.2-2':'es-GT'}}</p>
+            <p><strong>Total a Pagar:</strong> {{statement.totalAmount | currency:'GTQ':'symbol':'1.2-2':'es-GT'}}</p>
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="row text-center">
+          <div class="col-md-4">
+            <h5 class="text-success">{{statement.paidAmount | currency:'GTQ':'symbol':'1.2-2':'es-GT'}}</h5>
+            <small class="text-muted">Pagado</small>
+          </div>
+          <div class="col-md-4">
+            <h5 class="text-danger">{{statement.balance | currency:'GTQ':'symbol':'1.2-2':'es-GT'}}</h5>
+            <small class="text-muted">Saldo Pendiente</small>
+          </div>
+          <div class="col-md-4">
+            <h5>{{statement.paidPayments}} / {{statement.totalPayments}}</h5>
+            <small class="text-muted">Cuotas Pagadas</small>
+          </div>
+        </div>
+
+        <!-- Barra de progreso -->
+        <div class="progress mt-3" style="height: 25px;">
+          <div class="progress-bar bg-success"
+               [style.width.%]="getProgressPercentage()"
+               role="progressbar">
+            {{getProgressPercentage()}}%
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cronograma de Pagos -->
+    <div class="card mt-3">
+      <div class="card-header bg-info text-white">
+        <h5 class="mb-0">Cronograma de Pagos</h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-sm table-hover">
+            <thead>
+            <tr>
+              <th>#</th>
+              <th>Fecha de Vencimiento</th>
+              <th>Capital</th>
+              <th>Interés</th>
+              <th>Total</th>
+              <th>Estado</th>
+              <th>Fecha de Pago</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let schedule of statement.paymentSchedule">
+              <td>{{schedule.paymentNumber}}</td>
+              <td>{{schedule.dueDate | date:'dd/MM/yyyy'}}</td>
+              <td>{{schedule.principalAmount | currency:'GTQ':'symbol':'1.2-2':'es-GT'}}</td>
+              <td>{{schedule.interestAmount | currency:'GTQ':'symbol':'1.2-2':'es-GT'}}</td>
+              <td><strong>{{schedule.amountDue | currency:'GTQ':'symbol':'1.2-2':'es-GT'}}</strong></td>
+              <td>
+                      <span class="badge" [ngClass]="{
+                        'bg-success': schedule.status === 'PAGADO',
+                        'bg-warning': schedule.status === 'PENDIENTE',
+                        'bg-danger': schedule.status === 'VENCIDO'
+                      }">{{schedule.status}}</span>
+              </td>
+              <td>{{schedule.paidDate ? (schedule.paidDate | date:'dd/MM/yyyy') : '-'}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Historial de Pagos -->
+    <div class="card mt-3">
+      <div class="card-header bg-success text-white">
+        <h5 class="mb-0">Historial de Pagos</h5>
+      </div>
+      <div class="card-body">
+        <div *ngIf="statement.payments.length === 0" class="alert alert-info">
+          No se han reportado pagos aún
+        </div>
+
+        <div class="table-responsive" *ngIf="statement.payments.length > 0">
+          <table class="table table-sm table-hover">
+            <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Pago #</th>
+              <th>Monto</th>
+              <th>Método</th>
+              <th>Estado</th>
+              <th>Comentario</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let payment of statement.payments">
+              <td>{{payment.paymentDate | date:'dd/MM/yyyy HH:mm'}}</td>
+              <td>{{payment.paymentNumber}}</td>
+              <td>{{payment.amountPaid | currency:'GTQ':'symbol':'1.2-2':'es-GT'}}</td>
+              <td>{{payment.paymentMethod}}</td>
+              <td>
+                      <span class="badge" [ngClass]="{
+                        'bg-success': payment.status === 'APROBADO',
+                        'bg-warning': payment.status === 'PENDIENTE',
+                        'bg-danger': payment.status === 'RECHAZADO'
+                      }">{{payment.status}}</span>
+              </td>
+              <td>{{payment.reviewComment || '-'}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-3">
+      <button class="btn btn-primary" (click)="printStatement()">
+        <i class="bi bi-printer"></i> Imprimir Estado de Cuenta
+      </button>
+    </div>
+  </div>
+</div>
