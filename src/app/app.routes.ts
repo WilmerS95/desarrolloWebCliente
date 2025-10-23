@@ -19,6 +19,7 @@ import { MyContractsComponent } from './pages/my-contracts/my-contracts.componen
 import { AccountStatementComponent } from './pages/account-statement/account-statement.component'
 import { ReportPaymentComponent } from './pages/report-payment/report-payment.component'
 import { ReviewPaymentsComponent } from './pages/review-payments/review-payments.component'
+import { AccountStatementPrintComponent } from './pages/account-statement-print/account-statement-print.component'
 
 export const routes: Routes = [
   { path: '', redirectTo: 'store', pathMatch: 'full' },
@@ -38,9 +39,10 @@ export const routes: Routes = [
   { path: 'loan-history', component: LoanHistoryComponent, canActivate: [authGuard] },
   { path: 'loan-history/:id', component: LoanHistoryDetailComponent, canActivate: [authGuard] },
   { path: 'my-contracts', component: MyContractsComponent, canActivate: [authGuard] },
-  { path: 'account-statement', component: AccountStatementComponent },
+  { path: 'account-statement/:loanId', component: AccountStatementComponent },
   { path: 'report-payment', component: ReportPaymentComponent },
   { path: 'review-payments', component: ReviewPaymentsComponent },
+  { path: 'account-statement-print/:loanId', component: AccountStatementPrintComponent },
   //{ path: 'my-contracts/:id', component: ContractDetailComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: 'store' }
 ];

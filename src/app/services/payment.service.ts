@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { AuthService } from '../auth/services/auth.service';
 
 export interface PaymentRequestDTO {
   loanId: number;
@@ -60,9 +61,12 @@ export interface AccountStatementDTO {
   providedIn: 'root'
 })
 export class PaymentService {
-  private apiUrl = 'http://192.168.1.39:8080/api/payments';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authService: AuthService) { }
+
+  private get apiUrl(): string {
+    return this.authService.getBaseUrl() + '/loan-applications';
+  }
 
   reportPayment(request: PaymentRequestDTO): Observable<any> {
     return this.http.post(`${this.apiUrl}/report`, request);

@@ -1,5 +1,3 @@
-// src/app/auth/services/auth.service.ts
-
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { RegisterRequest } from '../../shared/models/register-request';
@@ -13,7 +11,7 @@ export class AuthService {
 
   private tokenTimer: any;
 
-  private readonly _baseUrl = new BehaviorSubject<string>('http://192.168.1.39:8080');
+  private readonly _baseUrl = new BehaviorSubject<string>('http://158.23.57.56:8080');
   public readonly baseUrl$: Observable<string> = this._baseUrl.asObservable();
 
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasValidToken());

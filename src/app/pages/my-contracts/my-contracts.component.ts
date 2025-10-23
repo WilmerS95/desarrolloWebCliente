@@ -58,6 +58,11 @@ export class MyContractsComponent implements OnInit {
       this.router.navigate(['/my-contracts', loanApplicationId]);
     }
 
+  goToAccountStatement(loanId: number): void {
+    console.log('Navegando al estado de cuenta del préstamo:', loanId);
+    this.router.navigate(['/account-statement-print', loanId]);
+  }
+
   viewContract(loanApplicationId: number): void {
     this.contractService.openContractInNewWindow(loanApplicationId);
   }
