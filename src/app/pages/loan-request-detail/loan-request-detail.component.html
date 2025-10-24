@@ -17,9 +17,9 @@
             <span class="badge"
                   [ngClass]="{
                 'bg-secondary': request.status==='PENDIENTE',
-                'bg-success': request.status==='ACEPTADO',
+                'bg-success': request.status==='CLIENTE_ACEPTO',
                 'bg-danger': request.status==='RECHAZADO',
-                'bg-warning text-dark': request.status==='CONTRA_OFERTADO'
+                'bg-warning text-dark': request.status==='APROBADO_PENDIENTE_CLIENTE'
               }">{{ request.status }}
             </span>
           </p>

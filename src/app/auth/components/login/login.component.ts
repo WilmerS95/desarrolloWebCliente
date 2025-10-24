@@ -64,7 +64,6 @@ export class LoginComponent {
             text: 'El usuario o la contraseña son incorrectos'
           });
         } else {
-          // Cualquier otro error
           Swal.fire({
             icon: 'error',
             title: 'Error',

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from '../auth/services/auth.service';
 
@@ -62,29 +62,54 @@ export interface AccountStatementDTO {
 })
 export class PaymentService {
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) { }
 
   private get apiUrl(): string {
-    return this.authService.getBaseUrl() + '/loan-applications';
+    return this.authService.getBaseUrl() + '/api/payments';
   }
 
-  reportPayment(request: PaymentRequestDTO): Observable<any> {
-    return this.http.post(`${this.apiUrl}/report`, request);
+  private getHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
-  reviewPayment(review: PaymentReviewDTO): Observable<any> {
-    return this.http.put(`${this.apiUrl}/review`, review);
+  reportPayment(request: PaymentRequestDTO): Observable<PaymentDTO> {
+    return this.http.post<PaymentDTO>(
+      `${this.apiUrl}/report`,
+      request,
+      { headers: this.getHeaders() }
+    );
+  }
+
+  reviewPayment(review: PaymentReviewDTO): Observable<PaymentDTO> {
+    return this.http.put<PaymentDTO>(
+      `${this.apiUrl}/review`,
+      review,
+      { headers: this.getHeaders() }
+    );
   }
 
   getPendingPayments(): Observable<PaymentDTO[]> {
-    return this.http.get<PaymentDTO[]>(`${this.apiUrl}/pending`);
+    return this.http.get<PaymentDTO[]>(
+      `${this.apiUrl}/pending`,
+      { headers: this.getHeaders() }
+    );
   }
 
   getLoanPayments(loanId: number): Observable<PaymentDTO[]> {
-    return this.http.get<PaymentDTO[]>(`${this.apiUrl}/loan/${loanId}`);
+    return this.http.get<PaymentDTO[]>(
+      `${this.apiUrl}/loan/${loanId}`,
+      { headers: this.getHeaders() }
+    );
   }
 
   getAccountStatement(loanId: number): Observable<AccountStatementDTO> {
-    return this.http.get<AccountStatementDTO>(`${this.apiUrl}/statement/${loanId}`);
+    return this.http.get<AccountStatementDTO>(
+      `${this.apiUrl}/statement/${loanId}`,
+      { headers: this.getHeaders() }
+    );
   }
 }

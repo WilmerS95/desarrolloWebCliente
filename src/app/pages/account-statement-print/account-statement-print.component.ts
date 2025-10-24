@@ -1,8 +1,8 @@
-// account-statement-print.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { PaymentService } from '../../services/payment.service';
+import Swal from 'sweetalert2';
 
 interface AccountStatement {
   loanId: number;
@@ -82,9 +82,13 @@ export class AccountStatementPrintComponent implements OnInit {
         console.log(' Estado de cuenta cargado:', data);
       },
       error: (error) => {
-        console.error(' Error cargando estado de cuenta:', error);
-        this.loading = false;
-        alert('Error al cargar el estado de cuenta');
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error al cargar el estado de cuenta',
+        }).then(() => {
+          return;
+        });
       }
     });
   }
@@ -372,7 +376,6 @@ export class AccountStatementPrintComponent implements OnInit {
       printWindow.print();
     };
   }
-
 
   private getUserName(): string {
     const user = JSON.parse(localStorage.getItem('user') || '{}');

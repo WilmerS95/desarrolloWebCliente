@@ -36,9 +36,9 @@
         class="badge"
         [ngClass]="{
           'bg-secondary': app.status === 'PENDIENTE',
-          'bg-success': app.status === 'ACEPTADO',
+          'bg-success': app.status === 'CLIENTE_ACEPTO',
           'bg-danger': app.status === 'RECHAZADO',
-          'bg-warning text-dark': app.status === 'CONTRAOFERTADO'
+          'bg-warning text-dark': app.status === 'APROBADO_PENDIENTE_CLIENTE',
         }">
         {{ app.status }}
       </span>

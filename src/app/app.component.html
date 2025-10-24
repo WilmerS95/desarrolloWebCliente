@@ -42,18 +42,18 @@
           </li>
         </ng-container>
         <ng-container *ngIf="isLoggedIn()">
-          <li *ngIf="can('EDIT_PROFILE')">
+          <!--<li *ngIf="can('EDIT_PROFILE')">
             <a routerLink="/profile">
               <i class="bi bi-person-badge me-2"></i>
               Perfil
             </a>
-          </li>
-          <li>
+          </li>-->
+          <!--<li>
             <a routerLink="/settings">
               <i class="bi bi-gear me-2"></i>
               Configuración
             </a>
-          </li>
+          </li>-->
           <li>
             <a (click)="goToReportPayment()">
               Reporte de pagos

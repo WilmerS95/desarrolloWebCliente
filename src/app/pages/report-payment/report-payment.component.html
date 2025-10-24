@@ -1,68 +1,156 @@
 <div class="container mt-4">
-  <h2>Reportar Pago</h2>
-
-  <div class="card mt-3">
-    <div class="card-body">
-      <form (ngSubmit)="onSubmit()">
-
-        <div class="mb-3">
-          <label class="form-label">Préstamo *</label>
-          <select class="form-control" [(ngModel)]="payment.loanId" name="loanId" required>
-            <option value="">Seleccione un préstamo</option>
-            <option *ngFor="let loan of userLoans" [value]="loan.loanId">
-              Préstamo #{{loan.loanId}} - {{loan.itemName}}
-            </option>
-          </select>
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <h3 class="mb-0">
+            <i class="bi bi-credit-card"></i> Reportar Pago
+          </h3>
         </div>
+        <div class="card-body">
 
-        <div class="mb-3">
-          <label class="form-label">Número de Pago *</label>
-          <input type="number" class="form-control"
-                 [(ngModel)]="payment.paymentNumber"
-                 name="paymentNumber"
-                 min="1"
-                 required>
+          <div *ngIf="userLoans.length === 0" class="alert alert-info">
+            <i class="bi bi-info-circle"></i>
+            No tienes préstamos activos en este momento.
+          </div>
+
+          <form *ngIf="userLoans.length > 0" (ngSubmit)="onSubmit()">
+
+            <!-- Selección de Préstamo -->
+            <div class="mb-3">
+              <label for="loanId" class="form-label">
+                <strong>Selecciona tu Préstamo *</strong>
+              </label>
+              <select
+                class="form-select"
+                id="loanId"
+                [(ngModel)]="payment.loanId"
+                name="loanId"
+                (change)="onLoanChange()"
+                required>
+                <option [value]="0">-- Selecciona un préstamo --</option>
+                <option *ngFor="let loan of userLoans" [value]="loan.loanId">
+                  Préstamo #{{loan.loanId}} - {{loan.itemName}} (Saldo: Q{{loan.balance | number:'1.2-2'}})
+                </option>
+              </select>
+            </div>
+
+            <!-- Número de Cuota -->
+            <div class="mb-3">
+              <label for="paymentNumber" class="form-label">
+                <strong>Número de Cuota *</strong>
+              </label>
+              <input
+                type="number"
+                class="form-control"
+                id="paymentNumber"
+                [(ngModel)]="payment.paymentNumber"
+                name="paymentNumber"
+                min="1"
+                required>
+              <small class="text-muted">Indica qué número de cuota estás pagando</small>
+            </div>
+
+            <!-- Monto Pagado -->
+            <div class="mb-3">
+              <label for="amountPaid" class="form-label">
+                <strong>Monto Pagado (Q) *</strong>
+              </label>
+              <input
+                type="number"
+                class="form-control"
+                id="amountPaid"
+                [(ngModel)]="payment.amountPaid"
+                name="amountPaid"
+                step="0.01"
+                min="0.01"
+                required>
+            </div>
+
+            <!-- Método de Pago -->
+            <div class="mb-3">
+              <label for="paymentMethod" class="form-label">
+                <strong>Método de Pago *</strong>
+              </label>
+              <select
+                class="form-select"
+                id="paymentMethod"
+                [(ngModel)]="payment.paymentMethod"
+                name="paymentMethod"
+                required>
+                <option *ngFor="let method of paymentMethods" [value]="method.value">
+                  {{method.label}}
+                </option>
+              </select>
+            </div>
+
+            <!-- Comprobante -->
+            <div class="mb-3">
+              <label for="fileInput" class="form-label">
+                <strong>Comprobante de Pago *</strong>
+              </label>
+              <input
+                type="file"
+                class="form-control"
+                id="fileInput"
+                accept="image/*"
+                (change)="onFileSelected($event)"
+                required>
+              <small class="text-muted">
+                Adjunta una foto o captura del comprobante (máx. 5MB)
+              </small>
+            </div>
+
+            <!-- Vista Previa -->
+            <div *ngIf="imagePreview" class="mb-3">
+              <label class="form-label"><strong>Vista Previa:</strong></label>
+              <div class="text-center">
+                <img [src]="imagePreview" class="img-thumbnail" style="max-height: 300px;">
+              </div>
+            </div>
+
+            <!-- Botones -->
+            <div class="d-flex gap-2 justify-content-end">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="resetForm()"
+                [disabled]="loading">
+                <i class="bi bi-arrow-counterclockwise"></i> Limpiar
+              </button>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="loading || !isFormValid()">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+                <i *ngIf="!loading" class="bi bi-send"></i>
+                {{ loading ? 'Enviando...' : 'Reportar Pago' }}
+              </button>
+            </div>
+
+          </form>
+
         </div>
+      </div>
 
-        <div class="mb-3">
-          <label class="form-label">Monto Pagado (GTQ) *</label>
-          <input type="number" class="form-control"
-                 [(ngModel)]="payment.amountPaid"
-                 name="amountPaid"
-                 step="0.01"
-                 min="0"
-                 required>
+      <!-- Instrucciones -->
+      <div class="card mt-3">
+        <div class="card-body">
+          <h5 class="card-title">
+            <i class="bi bi-info-circle text-info"></i> Instrucciones
+          </h5>
+          <ul class="mb-0">
+            <li>Selecciona el préstamo al que corresponde el pago</li>
+            <li>Indica el número de cuota que estás pagando</li>
+            <li>Ingresa el monto exacto que pagaste</li>
+            <li>Selecciona el método de pago utilizado</li>
+            <li>Adjunta una foto clara del comprobante de pago</li>
+            <li>Tu pago será revisado por un administrador</li>
+            <li>Recibirás una notificación cuando sea aprobado o rechazado</li>
+          </ul>
         </div>
+      </div>
 
-        <div class="mb-3">
-          <label class="form-label">Método de Pago *</label>
-          <select class="form-control" [(ngModel)]="payment.paymentMethod" name="paymentMethod" required>
-            <option value="">Seleccione método</option>
-            <option value="TRANSFERENCIA">Transferencia Bancaria</option>
-            <option value="DEPOSITO">Depósito en Efectivo</option>
-            <option value="CHEQUE">Cheque</option>
-            <option value="EFECTIVO">Efectivo</option>
-          </select>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Comprobante de Pago *</label>
-          <input type="file" class="form-control"
-                 (change)="onFileSelected($event)"
-                 accept="image/*"
-                 required>
-          <small class="text-muted">Formatos aceptados: JPG, PNG</small>
-        </div>
-
-        <div class="mb-3" *ngIf="imagePreview">
-          <img [src]="imagePreview" class="img-thumbnail" style="max-width: 300px;">
-        </div>
-
-        <button type="submit" class="btn btn-primary" [disabled]="loading || !isFormValid()">
-          <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
-          {{ loading ? 'Enviando...' : 'Reportar Pago' }}
-        </button>
-      </form>
     </div>
   </div>
 </div>

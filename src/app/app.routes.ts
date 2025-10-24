@@ -20,6 +20,7 @@ import { AccountStatementComponent } from './pages/account-statement/account-sta
 import { ReportPaymentComponent } from './pages/report-payment/report-payment.component'
 import { ReviewPaymentsComponent } from './pages/review-payments/review-payments.component'
 import { AccountStatementPrintComponent } from './pages/account-statement-print/account-statement-print.component'
+import { MyLoansComponent } from './pages/my-loans/my-loans.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'store', pathMatch: 'full' },

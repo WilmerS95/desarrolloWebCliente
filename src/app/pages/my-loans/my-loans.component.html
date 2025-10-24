@@ -1,0 +1,126 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>
+      <i class="bi bi-bank"></i> Mis Préstamos Activos
+    </h2>
+    <button class="btn btn-primary" (click)="reportPayment()">
+      <i class="bi bi-credit-card"></i> Reportar Pago
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="text-center mt-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-3">Cargando tus préstamos...</p>
+  </div>
+
+  <div *ngIf="!loading && activeLoans.length === 0" class="alert alert-info">
+    <i class="bi bi-info-circle"></i>
+    No tienes préstamos activos en este momento.
+  </div>
+
+  <div class="row" *ngIf="!loading && activeLoans.length > 0">
+    <div class="col-md-6 mb-4" *ngFor="let loan of activeLoans">
+      <div class="card h-100 shadow-sm">
+        <div class="card-header" [ngClass]="{
+          'bg-success text-white': loan.status === 'ACTIVE',
+          'bg-warning': loan.status === 'PENDING_PAYMENT',
+          'bg-danger text-white': loan.status === 'OVERDUE'
+        }">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Préstamo #{{loan.loanId}}</h5>
+            <span class="badge" [ngClass]="getStatusBadgeClass(loan.status)">
+              {{getStatusLabel(loan.status)}}
+            </span>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <h6 class="card-title">
+            <i class="bi bi-box"></i> {{loan.itemName}}
+          </h6>
+          <p class="text-muted mb-3">{{loan.itemBrand}}</p>
+
+          <div class="row mb-3">
+            <div class="col-6">
+              <small class="text-muted">Monto Prestado</small>
+              <p class="mb-0 fw-bold">Q{{loan.loanAmount | number:'1.2-2'}}</p>
+            </div>
+            <div class="col-6">
+              <small class="text-muted">Total a Pagar</small>
+              <p class="mb-0 fw-bold">Q{{loan.totalAmount | number:'1.2-2'}}</p>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-6">
+              <small class="text-muted">Intereses</small>
+              <p class="mb-0">Q{{loan.totalInterest | number:'1.2-2'}}</p>
+            </div>
+            <div class="col-6">
+              <small class="text-muted">Tasa</small>
+              <p class="mb-0">{{loan.interestRate}}%</p>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <div class="d-flex justify-content-between mb-1">
+              <small class="text-muted">Saldo Pendiente</small>
+              <small class="text-muted">{{getProgressPercentage(loan)}}% pagado</small>
+            </div>
+            <div class="progress" style="height: 20px;">
+              <div
+                class="progress-bar bg-success"
+                role="progressbar"
+                [style.width.%]="getProgressPercentage(loan)"
+                [attr.aria-valuenow]="getProgressPercentage(loan)"
+                aria-valuemin="0"
+                aria-valuemax="100">
+              </div>
+            </div>
+            <div class="text-center mt-1">
+              <strong class="text-danger">Q{{loan.balance | number:'1.2-2'}}</strong>
+            </div>
+          </div>
+
+          <hr>
+
+          <div class="row text-center mb-2">
+            <div class="col-6">
+              <small class="text-muted">Plazo</small>
+              <p class="mb-0">{{loan.term}} cuotas</p>
+            </div>
+            <div class="col-6">
+              <small class="text-muted">Fecha Aprobación</small>
+              <p class="mb-0">{{loan.approvalDate | date:'dd/MM/yyyy'}}</p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="card-footer bg-transparent">
+          <button
+            class="btn btn-primary w-100"
+            (click)="viewAccountStatement(loan.loanId)">
+            <i class="bi bi-file-text"></i> Ver Estado de Cuenta
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mt-4" *ngIf="!loading && activeLoans.length > 0">
+    <div class="card-body">
+      <h5 class="card-title">
+        <i class="bi bi-info-circle text-info"></i> Información Importante
+      </h5>
+      <ul class="mb-0">
+        <li>Puedes reportar tus pagos en cualquier momento desde el botón "Reportar Pago"</li>
+        <li>Los pagos son verificados por un administrador antes de aplicarse</li>
+        <li>Revisa tu estado de cuenta para ver el detalle de tus cuotas</li>
+        <li>Mantén tus pagos al día para evitar cargos por mora</li>
+      </ul>
+    </div>
+  </div>
+</div>
