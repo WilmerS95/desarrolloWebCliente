@@ -1,156 +1,198 @@
 <div class="container mt-4">
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-      <div class="card shadow">
+  <div class="row">
+    <div class="col-lg-8 mx-auto">
+
+      <div class="card shadow-sm mb-4">
         <div class="card-header bg-primary text-white">
-          <h3 class="mb-0">
+          <h4 class="mb-0">
             <i class="bi bi-credit-card"></i> Reportar Pago
-          </h3>
+          </h4>
         </div>
-        <div class="card-body">
+      </div>
 
-          <div *ngIf="userLoans.length === 0" class="alert alert-info">
-            <i class="bi bi-info-circle"></i>
-            No tienes préstamos activos en este momento.
+      <div *ngIf="loading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-3">Cargando préstamos...</p>
+      </div>
+
+      <div *ngIf="!loading && loans.length === 0" class="alert alert-info">
+        <h5 class="alert-heading">
+          <i class="bi bi-info-circle"></i> No tienes préstamos activos en este momentoo
+        </h5>
+        <p class="mb-0">
+          No tienes préstamos con balance pendiente para reportar pagos.
+        </p>
+        <hr>
+        <button class="btn btn-primary" routerLink="/my-loans">
+          <i class="bi bi-arrow-left"></i> Ver Mis Préstamos
+        </button>
+      </div>
+
+      <div *ngIf="!loading && loans.length > 0">
+
+        <div class="card shadow-sm mb-4">
+          <div class="card-body">
+            <h5 class="card-title">
+              <i class="bi bi-info-circle text-primary"></i> Instrucciones
+            </h5>
+            <ul class="mb-0">
+              <li>Selecciona el préstamo al que corresponde el pago</li>
+              <li>Indica el número de cuota que estás pagando</li>
+              <li>Ingresa el monto exacto que pagaste</li>
+              <li>Selecciona el método de pago utilizado</li>
+              <li>Adjunta una foto clara del comprobante de pago</li>
+              <li>Tu pago será revisado por un administrador</li>
+              <li>Recibirás una notificación cuando sea aprobado o rechazado</li>
+            </ul>
           </div>
+        </div>
 
-          <form *ngIf="userLoans.length > 0" (ngSubmit)="onSubmit()">
+        <form (ngSubmit)="submitPayment()" #paymentForm="ngForm">
+          <div class="card shadow-sm">
+            <div class="card-body">
 
-            <!-- Selección de Préstamo -->
-            <div class="mb-3">
-              <label for="loanId" class="form-label">
-                <strong>Selecciona tu Préstamo *</strong>
-              </label>
-              <select
-                class="form-select"
-                id="loanId"
-                [(ngModel)]="payment.loanId"
-                name="loanId"
-                (change)="onLoanChange()"
-                required>
-                <option [value]="0">-- Selecciona un préstamo --</option>
-                <option *ngFor="let loan of userLoans" [value]="loan.loanId">
-                  Préstamo #{{loan.loanId}} - {{loan.itemName}} (Saldo: Q{{loan.balance | number:'1.2-2'}})
-                </option>
-              </select>
+              <div class="mb-4">
+                <label class="form-label fw-bold">
+                  <i class="bi bi-bank"></i> Seleccionar Préstamo *
+                </label>
+                <select
+                  class="form-select form-select-lg"
+                  [(ngModel)]="selectedLoanId"
+                  name="loanId"
+                  (change)="onLoanSelected()"
+                  required>
+                  <option [ngValue]="null">-- Selecciona un préstamo --</option>
+                  <option *ngFor="let loan of loans" [ngValue]="loan.loanId">
+                    Préstamo #{{ loan.loanId }} - {{ loan.itemName }}
+                    (Balance: {{ loan.balance | currency:'GTQ':'symbol':'1.2-2' }})
+                  </option>
+                </select>
+              </div>
+
+              <div *ngIf="selectedLoan" class="alert alert-info mb-4">
+                <h6 class="alert-heading">
+                  <i class="bi bi-info-circle"></i> Información del Préstamo
+                </h6>
+                <div class="row">
+                  <div class="col-md-6">
+                    <p class="mb-1"><strong>Artículo:</strong> {{ selectedLoan.itemName }}</p>
+                    <p class="mb-1"><strong>Monto Prestado:</strong> {{ selectedLoan.loanAmount | currency:'GTQ':'symbol':'1.2-2' }}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <p class="mb-1"><strong>Total a Pagar:</strong> {{ selectedLoan.totalAmount | currency:'GTQ':'symbol':'1.2-2' }}</p>
+                    <p class="mb-1"><strong>Balance Pendiente:</strong>
+                      <span class="text-danger fw-bold">{{ selectedLoan.balance | currency:'GTQ':'symbol':'1.2-2' }}</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label fw-bold">
+                  <i class="bi bi-hash"></i> Número de Cuota *
+                </label>
+                <input
+                  type="number"
+                  class="form-control form-control-lg"
+                  [(ngModel)]="paymentNumber"
+                  name="paymentNumber"
+                  min="1"
+                  [max]="selectedLoan?.term || 999"
+                  required
+                  placeholder="Ej: 1, 2, 3...">
+                <small class="text-muted" *ngIf="selectedLoan">
+                  Este préstamo tiene {{ selectedLoan.term }} cuotas en total
+                </small>
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label fw-bold">
+                  <i class="bi bi-currency-dollar"></i> Monto Pagado *
+                </label>
+                <div class="input-group input-group-lg">
+                  <span class="input-group-text">Q</span>
+                  <input
+                    type="number"
+                    class="form-control"
+                    [(ngModel)]="amountPaid"
+                    name="amountPaid"
+                    step="0.01"
+                    min="0.01"
+                    required
+                    placeholder="0.00">
+                </div>
+                <small class="text-muted" *ngIf="selectedLoan">
+                  Monto sugerido por cuota: {{ (selectedLoan.totalAmount / selectedLoan.term) | currency:'GTQ':'symbol':'1.2-2' }}
+                </small>
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label fw-bold">
+                  <i class="bi bi-wallet2"></i> Método de Pago *
+                </label>
+                <select
+                  class="form-select form-select-lg"
+                  [(ngModel)]="paymentMethod"
+                  name="paymentMethod"
+                  required>
+                  <option value="TRANSFERENCIA">Transferencia Bancaria</option>
+                  <option value="DEPOSITO">Depósito en Ventanilla</option>
+                  <option value="EFECTIVO">Efectivo en Sucursal</option>
+                  <option value="CHEQUE">Cheque</option>
+                  <option value="OTROS">Otros</option>
+                </select>
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label fw-bold">
+                  <i class="bi bi-image"></i> Comprobante de Pago *
+                </label>
+                <input
+                  type="file"
+                  class="form-control form-control-lg"
+                  (change)="onFileSelected($event)"
+                  accept="image/*"
+                  required>
+                <small class="text-muted d-block mt-1">
+                  Adjunta una foto clara del comprobante de pago (JPG, PNG)
+                </small>
+
+                <div *ngIf="imagePreview" class="mt-3">
+                  <p class="mb-2 fw-bold">Vista Previa:</p>
+                  <img [src]="imagePreview" alt="Preview" class="img-thumbnail" style="max-height: 300px;">
+                </div>
+              </div>
+
             </div>
 
-            <!-- Número de Cuota -->
-            <div class="mb-3">
-              <label for="paymentNumber" class="form-label">
-                <strong>Número de Cuota *</strong>
-              </label>
-              <input
-                type="number"
-                class="form-control"
-                id="paymentNumber"
-                [(ngModel)]="payment.paymentNumber"
-                name="paymentNumber"
-                min="1"
-                required>
-              <small class="text-muted">Indica qué número de cuota estás pagando</small>
-            </div>
-
-            <!-- Monto Pagado -->
-            <div class="mb-3">
-              <label for="amountPaid" class="form-label">
-                <strong>Monto Pagado (Q) *</strong>
-              </label>
-              <input
-                type="number"
-                class="form-control"
-                id="amountPaid"
-                [(ngModel)]="payment.amountPaid"
-                name="amountPaid"
-                step="0.01"
-                min="0.01"
-                required>
-            </div>
-
-            <!-- Método de Pago -->
-            <div class="mb-3">
-              <label for="paymentMethod" class="form-label">
-                <strong>Método de Pago *</strong>
-              </label>
-              <select
-                class="form-select"
-                id="paymentMethod"
-                [(ngModel)]="payment.paymentMethod"
-                name="paymentMethod"
-                required>
-                <option *ngFor="let method of paymentMethods" [value]="method.value">
-                  {{method.label}}
-                </option>
-              </select>
-            </div>
-
-            <!-- Comprobante -->
-            <div class="mb-3">
-              <label for="fileInput" class="form-label">
-                <strong>Comprobante de Pago *</strong>
-              </label>
-              <input
-                type="file"
-                class="form-control"
-                id="fileInput"
-                accept="image/*"
-                (change)="onFileSelected($event)"
-                required>
-              <small class="text-muted">
-                Adjunta una foto o captura del comprobante (máx. 5MB)
-              </small>
-            </div>
-
-            <!-- Vista Previa -->
-            <div *ngIf="imagePreview" class="mb-3">
-              <label class="form-label"><strong>Vista Previa:</strong></label>
-              <div class="text-center">
-                <img [src]="imagePreview" class="img-thumbnail" style="max-height: 300px;">
+            <div class="card-footer">
+              <div class="d-flex justify-content-between">
+                <button
+                  type="button"
+                  class="btn btn-secondary btn-lg"
+                  (click)="cancel()"
+                  [disabled]="submitting">
+                  <i class="bi bi-x-circle"></i> Cancelar
+                </button>
+                <button
+                  type="submit"
+                  class="btn btn-primary btn-lg"
+                  [disabled]="!paymentForm.valid || submitting">
+                  <span *ngIf="!submitting">
+                    <i class="bi bi-check-circle"></i> Reportar Pago
+                  </span>
+                  <span *ngIf="submitting">
+                    <span class="spinner-border spinner-border-sm me-2"></span>
+                    Enviando...
+                  </span>
+                </button>
               </div>
             </div>
-
-            <!-- Botones -->
-            <div class="d-flex gap-2 justify-content-end">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                (click)="resetForm()"
-                [disabled]="loading">
-                <i class="bi bi-arrow-counterclockwise"></i> Limpiar
-              </button>
-              <button
-                type="submit"
-                class="btn btn-primary"
-                [disabled]="loading || !isFormValid()">
-                <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
-                <i *ngIf="!loading" class="bi bi-send"></i>
-                {{ loading ? 'Enviando...' : 'Reportar Pago' }}
-              </button>
-            </div>
-
-          </form>
-
-        </div>
+          </div>
+        </form>
       </div>
-
-      <!-- Instrucciones -->
-      <div class="card mt-3">
-        <div class="card-body">
-          <h5 class="card-title">
-            <i class="bi bi-info-circle text-info"></i> Instrucciones
-          </h5>
-          <ul class="mb-0">
-            <li>Selecciona el préstamo al que corresponde el pago</li>
-            <li>Indica el número de cuota que estás pagando</li>
-            <li>Ingresa el monto exacto que pagaste</li>
-            <li>Selecciona el método de pago utilizado</li>
-            <li>Adjunta una foto clara del comprobante de pago</li>
-            <li>Tu pago será revisado por un administrador</li>
-            <li>Recibirás una notificación cuando sea aprobado o rechazado</li>
-          </ul>
-        </div>
-      </div>
-
     </div>
   </div>
 </div>

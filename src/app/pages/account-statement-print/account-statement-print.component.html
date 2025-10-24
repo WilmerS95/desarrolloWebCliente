@@ -24,24 +24,40 @@
     <div class="divider"></div>
 
     <div class="info-section">
-      <div class="info-row">
-        <div class="info-col">
-          <strong>Cliente:</strong> {{ customerName }}
+      <div class="client-info-box">
+        <h4>Información del Cliente</h4>
+        <div class="info-row">
+          <div class="info-col">
+            <strong><i class="fas fa-user"></i> Cliente:</strong> {{ statement?.clientName || customerName }}
+          </div>
+          <div class="info-col">
+            <strong><i class="fas fa-envelope"></i> Email:</strong> {{ statement?.clientEmail || 'No proporcionado' }}
+          </div>
         </div>
-        <div class="info-col">
-          <strong>ID Préstamo:</strong> {{ statement?.loanId }}
+        <div class="info-row">
+          <div class="info-col">
+            <strong><i class="fas fa-phone"></i> Teléfono:</strong> {{ statement?.clientPhone || 'No proporcionado' }}
+          </div>
+          <div class="info-col">
+            <strong><i class="fas fa-hashtag"></i> ID Préstamo:</strong> {{ statement?.loanId }}
+          </div>
         </div>
       </div>
-      <div class="info-row">
-        <div class="info-col">
-          <strong>Artículo:</strong> {{ statement?.itemName }}
-        </div>
-        <div class="info-col">
-          <strong>Estado:</strong>
-          <span [ngClass]="getStatusClass()">{{ statement?.status }}</span>
+
+      <div class="loan-info-box">
+        <h4>Información del Préstamo</h4>
+        <div class="info-row">
+          <div class="info-col">
+            <strong><i class="fas fa-box"></i> Artículo:</strong> {{ statement?.itemName }}
+          </div>
+          <div class="info-col">
+            <strong><i class="fas fa-info-circle"></i> Estado:</strong>
+            <span [ngClass]="getStatusClass()">{{ statement?.status }}</span>
+          </div>
         </div>
       </div>
     </div>
+
 
     <div class="summary-section">
       <h3>Resumen del Préstamo</h3>

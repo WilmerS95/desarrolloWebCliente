@@ -13,6 +13,9 @@ interface AccountStatement {
   paidAmount: number;
   status: string;
   itemName: string;
+  clientName: string;
+  clientEmail: string;
+  clientPhone: string;
   totalPayments: number;
   paidPayments: number;
   paymentSchedule: PaymentSchedule[];
@@ -70,7 +73,7 @@ export class AccountStatementPrintComponent implements OnInit {
       }
     });
 
-    this.customerName = this.getUserName();
+    //this.customerName = this.getUserName();
   }
 
   loadStatement(): void {
@@ -78,8 +81,10 @@ export class AccountStatementPrintComponent implements OnInit {
     this.paymentService.getAccountStatement(this.loanId).subscribe({
       next: (data) => {
         this.statement = data;
+        this.customerName = data.clientName || 'Cliente';
         this.loading = false;
         console.log(' Estado de cuenta cargado:', data);
+        console.log(' Cliente:', this.customerName);
       },
       error: (error) => {
         Swal.fire({
@@ -377,7 +382,7 @@ export class AccountStatementPrintComponent implements OnInit {
     };
   }
 
-  private getUserName(): string {
+  /* private getUserName(): string {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
 
     if (user.firstName && user.lastName) {
@@ -385,5 +390,5 @@ export class AccountStatementPrintComponent implements OnInit {
     }
 
     return user.username || 'Cliente';
-  }
+  } */
 }

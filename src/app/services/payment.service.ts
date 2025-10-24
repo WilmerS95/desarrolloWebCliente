@@ -51,10 +51,27 @@ export interface AccountStatementDTO {
   paidAmount: number;
   status: string;
   itemName: string;
+  clientName: string;
+  clientEmail: string;
+  clientPhone: string;
   totalPayments: number;
   paidPayments: number;
   paymentSchedule: PaymentScheduleDTO[];
   payments: PaymentDTO[];
+}
+
+export interface LoanDTO {
+  loanId: number;
+  itemName: string;
+  loanAmount: number;
+  totalAmount: number;
+  balance: number;
+  term: number;
+  status: string;
+  interestRate?: number;
+  totalInterest?: number;
+  approvalDate?: string;
+  disbursementDate?: string;
 }
 
 @Injectable({
@@ -69,6 +86,10 @@ export class PaymentService {
 
   private get apiUrl(): string {
     return this.authService.getBaseUrl() + '/api/payments';
+  }
+
+  private get loanApiUrl(): string {
+    return this.authService.getBaseUrl() + '/loan-applications';
   }
 
   private getHeaders(): HttpHeaders {
@@ -109,6 +130,27 @@ export class PaymentService {
   getAccountStatement(loanId: number): Observable<AccountStatementDTO> {
     return this.http.get<AccountStatementDTO>(
       `${this.apiUrl}/statement/${loanId}`,
+      { headers: this.getHeaders() }
+    );
+  }
+
+  getMyActiveLoans(): Observable<LoanDTO[]> {
+    return this.http.get<LoanDTO[]>(
+      `${this.loanApiUrl}/my-loans`,
+      { headers: this.getHeaders() }
+    );
+  }
+
+  getMyLoansWithBalance(): Observable<LoanDTO[]> {
+    return this.http.get<LoanDTO[]>(
+      `${this.loanApiUrl}/my-loans/with-balance`,
+      { headers: this.getHeaders() }
+    );
+  }
+
+  getAllMyLoans(): Observable<LoanDTO[]> {
+    return this.http.get<LoanDTO[]>(
+      `${this.loanApiUrl}/my-loans/all`,
       { headers: this.getHeaders() }
     );
   }
