@@ -60,7 +60,7 @@
               Reporte de pagos
             </a>
           </li>
-          <li>
+          <li *ngIf="can('APPROVE_LOANS')">
             <a (click)="goToReviewPayments()">
               <i class="bi bi-clipboard-check me-2"></i>
               Revisar Pagos
@@ -78,16 +78,16 @@
               Solicitudes de empeño
             </a>
           </li>
-          <li class="nav-item" *ngIf="can('VIEW_HISTORY')">
+          <li class="nav-item" *ngIf="can('VIEW_OWN_LOANS')">
             <a class="nav-link" (click)="goToHistory()" style="cursor: pointer;">
               <i class="bi bi-clock-history me-2"></i>
               Mi Historial
             </a>
           </li>
-          <li class="nav-item" *ngIf="can('VIEW_HISTORY')">
-            <a class="nav-link"(click)="goToContracts()" style="cursor: pointer;">
+          <li class="nav-item" *ngIf="can('VIEW_OWN_LOANS')">
+            <a class="nav-link" (click)="goToContracts()" style="cursor: pointer;">
               <i class="bi bi-file-earmark-text me-2"></i>
-              Mis Contratos
+              Mis Préstamos
             </a>
           </li>
           <li class="nav-item" *ngIf="can('MANAGE_PARAMETERS')">

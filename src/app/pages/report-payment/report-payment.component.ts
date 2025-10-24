@@ -240,6 +240,10 @@ export class ReportPaymentComponent implements OnInit {
     });
   }
 
+  goToContracts() {
+    this.router.navigate(['/my-contracts'])
+  }
+
   cancel(): void {
     this.router.navigate(['/my-loans']);
   }

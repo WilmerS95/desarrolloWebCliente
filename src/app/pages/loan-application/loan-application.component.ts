@@ -15,6 +15,7 @@ export class LoanApplicationComponent implements OnInit {
   loanForm!: FormGroup;
   selectedFiles: File[] = [];
   categories: any[] = [];
+  validImagesLoaded = false;
 
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
@@ -45,7 +46,31 @@ export class LoanApplicationComponent implements OnInit {
   }
 
   onFileSelected(event: any): void {
-    this.selectedFiles = Array.from(event.target.files);
+    const files = Array.from(event.target.files) as File[];
+      const validExtensions = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+
+      const invalidFiles = files.filter(file => !validExtensions.includes(file.type));
+
+      if (invalidFiles.length > 0) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Archivo no permitido',
+          text: 'Solo se permiten imágenes en formato JPG, PNG, GIF o WEBP'
+        });
+
+        this.selectedFiles = [];
+        this.fileInput.nativeElement.value = '';
+        this.validImagesLoaded = false;
+        return;
+      }
+
+      if (files.length === 0) {
+          this.validImagesLoaded = false;
+          return;
+        }
+
+        this.selectedFiles = files;
+        this.validImagesLoaded = this.selectedFiles.length > 0;
   }
 
   onSubmit(): void {
