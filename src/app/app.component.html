@@ -90,6 +90,12 @@
               Mis Préstamos
             </a>
           </li>
+          <!--<li class="nav-item" *ngIf="can('VIEW_OWN_LOANS')">
+            <a class="nav-link" (click)="goTransferItemAdmin()" style="cursor: pointer;">
+              <i class="bi bi-file-earmark-text me-2"></i>
+              Administrar Items a tienda
+            </a>
+          </li>-->
           <li class="nav-item" *ngIf="can('MANAGE_PARAMETERS')">
             <a class="nav-link" (click)="goToParameters()" style="cursor: pointer;">
               <i class="bi bi-sliders me-2"></i>

@@ -20,6 +20,7 @@ import { AccountStatementComponent } from './pages/account-statement/account-sta
 import { ReportPaymentComponent } from './pages/report-payment/report-payment.component'
 import { ReviewPaymentsComponent } from './pages/review-payments/review-payments.component'
 import { AccountStatementPrintComponent } from './pages/account-statement-print/account-statement-print.component'
+import { TransferItemsAdminComponent } from './pages/transfer-items-admin/transfer-items-admin.component'
 import { MyLoansComponent } from './pages/my-loans/my-loans.component';
 
 export const routes: Routes = [
@@ -44,6 +45,7 @@ export const routes: Routes = [
   { path: 'report-payment', component: ReportPaymentComponent },
   { path: 'review-payments', component: ReviewPaymentsComponent },
   { path: 'account-statement-print/:loanId', component: AccountStatementPrintComponent },
+  { path: 'transfer-items-admin', component: TransferItemsAdminComponent },
   //{ path: 'my-contracts/:id', component: ContractDetailComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: 'store' }
 ];

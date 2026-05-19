@@ -38,21 +38,30 @@ export class StoreComponent {
   ];
 
   items: Item[] = [
-    { itemID: 1, categoryId: 1, nameItem: 'Laptop Gamer', brand: 'Asus', photos: 'https://firebasestorage.googleapis.com/v0/b/solutec-pawn.firebasestorage.app/o/items%2Fimg_not_found.jpg?alt=media&token=c0f59d33-6a8c-4ecc-bcd0-e23b324a4cbf', description: 'Laptop potente para gaming', price: 4500 },
-    { itemID: 2, categoryId: 1, nameItem: 'Reloj Inteligente', brand: 'Apple', photos: '/assets/products/Laptop.jpg', description: 'Smartwatch de última generación', price: 2500 },
-    { itemID: 3, categoryId: 2, nameItem: 'Pulsera', brand: 'Pandora', photos: '/assets/products/Laptop.jpg', description: 'Pulsera elegante', price: 800 },
-    { itemID: 4, categoryId: 2, nameItem: 'Collar', brand: 'Swarovski', photos: '/assets/products/Laptop.jpg', description: 'Collar de lujo', price: 1200 },
-    { itemID: 5, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/Laptop.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
-    { itemID: 5, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/Laptop.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
-    { itemID: 5, categoryId: 3, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/Laptop.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
-    { itemID: 5, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/Laptop.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
-    { itemID: 5, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/Laptop.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
-    { itemID: 5, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/Laptop.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
-    { itemID: 5, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/Laptop.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
-    { itemID: 5, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/Laptop.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
-    { itemID: 5, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/Laptop.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
-    { itemID: 6, categoryId: 2, nameItem: 'Anillo', brand: 'Cartier', photos: '/assets/products/Laptop.jpg', description: 'Anillo de oro', price: 4000 }
-  ];
+      //{ itemID: 1, categoryId: 1, nameItem: 'Laptop Gamer', brand: 'Asus', photos: 'https://firebasestorage.googleapis.com/v0/b/solutec-pawn.firebasestorage.app/o/items%2Fimg_not_found.jpg?alt=media&token=c0f59d33-6a8c-4ecc-bcd0-e23b324a4cbf', description: 'Laptop potente para gaming', price: 4500 },
+      { itemID: 1, categoryId: 1, nameItem: 'Laptop Gamer', brand: 'Asus', photos: '/assets/products/Laptop.jpg', description: 'Laptop potente para gaming', price: 4500 },
+      { itemID: 2, categoryId: 1, nameItem: 'Reloj Inteligente', brand: 'Apple', photos: '/assets/products/smartwatch.jpeg', description: 'Smartwatch de última generación', price: 2500 },
+      { itemID: 3, categoryId: 2, nameItem: 'Pulsera', brand: 'Pandora', photos: '/assets/products/pulsera.jpg', description: 'Pulsera elegante', price: 800 },
+      { itemID: 4, categoryId: 2, nameItem: 'Collar', brand: 'Swarovski', photos: '/assets/products/collar.jpg', description: 'Collar de lujo', price: 1200 },
+      { itemID: 5, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/televisor.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
+      { itemID: 6, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/televisor1.jpeg', description: 'TV 4K 55 pulgadas', price: 5500 },
+      { itemID: 7, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/televisor2.jpeg', description: 'TV 4K 55 pulgadas', price: 5500 },
+      { itemID: 8, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/televisor3.jpeg', description: 'TV 4K 55 pulgadas', price: 5500 },
+      { itemID: 9, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/televisor4.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
+      { itemID: 10, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/televisor5.jpeg', description: 'TV 4K 55 pulgadas', price: 5500 },
+      { itemID: 11, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/televisor6.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
+      { itemID: 12, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/televisor7.jpg', description: 'TV 4K 55 pulgadas', price: 5500 },
+      { itemID: 13, categoryId: 1, nameItem: 'Televisor LED', brand: 'Samsung', photos: '/assets/products/televisor8.jpeg', description: 'TV 4K 55 pulgadas', price: 5500 },
+      { itemID: 14, categoryId: 2, nameItem: 'Anillo', brand: 'Cartier', photos: '/assets/products/anillo.jpg', description: 'Anillo de oro', price: 4000 },
+      { itemID: 15, categoryId: 2, nameItem: 'Aretes', brand: 'Pandora', photos: '/assets/products/aretes.jpg', description: 'Par de aretes de Oro', price: 2200 },
+      { itemID: 16, categoryId: 1, nameItem: 'Bocina', brand: 'Dolphin', photos: '/assets/products/bocina.jpg', description: 'Bocina Portatil', price: 700 },
+      { itemID: 17, categoryId: 2, nameItem: 'Anillo de Compromiso', brand: 'Tiffany', photos: '/assets/products/compromiso.avif', description: 'Anillo de Compromiso', price: 20000 },
+      { itemID: 18, categoryId: 4, nameItem: 'Jarron', brand: 'Panda', photos: '/assets/products/jarron.jpg', description: 'Jarron Decorativo', price: 300 },
+      { itemID: 19, categoryId: 1, nameItem: 'Refrigerador', brand: 'LG', photos: '/assets/products/refrigerador.avif', description: 'Jarron Decorativo', price: 2500 },
+      { itemID: 20, categoryId: 3, nameItem: 'Motocicleta', brand: 'Honda', photos: '/assets/products/pasola.jpg', description: 'Motocicleta tipo pasola', price: 10000 },
+      { itemID: 21, categoryId: 3, nameItem: 'Carro', brand: 'Hilux', photos: '/assets/products/hilux.png', description: 'Carro hilux', price: 100000 },
+      { itemID: 22, categoryId: 3, nameItem: 'Motocicleta', brand: 'Cross', photos: '/assets/products/cross.webp', description: 'Moto Cross', price: 90000 },
+    ];
 
   comments = [
     { user: 'Carlos López', message: 'Excelente atención y productos en muy buen estado.', rating: 5 },

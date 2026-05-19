@@ -170,6 +170,10 @@ export class AppComponent {
     this.router.navigate(['/admin/solicitudes']);
   }
 
+  goTransferItemAdmin(){
+    this.router.navigate(['transfer-items-admin']);
+  }
+
   goToParameters() {
     this.router.navigate(['/business-parameters']);
   }

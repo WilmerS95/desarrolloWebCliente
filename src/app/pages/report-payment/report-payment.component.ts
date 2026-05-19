@@ -201,7 +201,7 @@ export class ReportPaymentComponent implements OnInit {
             confirmButtonText: 'Ver Mis Préstamos',
             confirmButtonColor: '#0d6efd'
           }).then(() => {
-            this.router.navigate(['/my-loans']);
+            this.router.navigate(['/my-contracts']);
           });
         },
         error: (error: any) => {
