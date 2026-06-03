@@ -1,34 +1,34 @@
-// src/app/pages/business-parameters/business-parameters.component.ts
+// src/app/pages/tournament-parameters/tournament-parameters.component.ts
 
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { BusinessParameterService } from '../../services/business-parameter.service';
-import { BusinessParameter, ParameterHistory, PARAMETER_CATEGORIES, DATA_TYPES } from '../../shared/models/BusinessParameter';
+import { TournamentParameterService } from '../../services/tournament-parameters.service';
+import { TournamentParameter, ParameterHistory, PARAMETER_CATEGORIES, DATA_TYPES } from '../../shared/models/TournamentParameter';
 import { AuthService } from '../../auth/services/auth.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-business-parameters',
+  selector: 'app-tournament-parameters',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './business-parameters.component.html',
-  styleUrls: ['./business-parameters.component.css']
+  templateUrl: './tournament-parameters.component.html',
+  styleUrls: ['./tournament-parameters.component.css']
 })
-export class BusinessParametersComponent implements OnInit {
-  parameters: BusinessParameter[] = [];
-  filteredParameters: BusinessParameter[] = [];
+export class TournamentParameterService implements OnInit {
+  parameters: TournamentParameter[] = [];
+  filteredParameters: TournamentParameter[] = [];
   categories: string[] = [];
   selectedCategory: string = 'ALL';
   searchTerm: string = '';
   loading = false;
 
-  editingParam: BusinessParameter | null = null;
+  editingParam: TournamentParameter | null = null;
   tempValue: string = '';
   editReason: string = '';
 
   showCreateForm = false;
-  newParameter: Partial<BusinessParameter> = {
+  newParameter: Partial<TournamentParameter> = {
     category: 'GENERAL',
     dataType: 'STRING',
     isActive: true
@@ -41,7 +41,7 @@ export class BusinessParametersComponent implements OnInit {
   readonly DATA_TYPES = DATA_TYPES;
 
   constructor(
-    private paramService: BusinessParameterService,
+    private paramService: TournamentParameterService,
     private authService: AuthService
   ) {}
 
@@ -104,7 +104,7 @@ export class BusinessParametersComponent implements OnInit {
     this.filterParameters();
   }
 
-  startEdit(param: BusinessParameter) {
+  startEdit(param: TournamentParameter) {
     this.editingParam = { ...param };
     this.tempValue = param.value;
     this.editReason = '';
@@ -221,7 +221,7 @@ export class BusinessParametersComponent implements OnInit {
 
     if (result.isConfirmed) {
       this.loading = true;
-      this.paramService.create(this.newParameter as BusinessParameter).subscribe({
+      this.paramService.create(this.newParameter as TournamentParameter).subscribe({
         next: (created) => {
           this.parameters.push(created);
           this.filterParameters();
@@ -246,7 +246,7 @@ export class BusinessParametersComponent implements OnInit {
     }
   }
 
-  async deleteParameter(param: BusinessParameter) {
+  async deleteParameter(param: TournamentParameter) {
     const result = await Swal.fire({
       title: '¿Desactivar parámetro?',
       html: `
@@ -287,7 +287,7 @@ export class BusinessParametersComponent implements OnInit {
     }
   }
 
-  viewHistory(param: BusinessParameter) {
+  viewHistory(param: TournamentParameter) {
     this.loading = true;
     this.paramService.getHistory(param.parameterId).subscribe({
       next: (history) => {

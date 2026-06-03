@@ -1,0 +1,99 @@
+<div class="container-fluid p-4">
+  <div class="row mb-4">
+    <div class="col-md-8">
+      <h2>
+        <i class="bi bi-people"></i> Equipos &nbsp;
+        <button class="btn btn-sm btn-secondary" (click)="goBack()">
+          ← Volver
+        </button>
+      </h2>
+    </div>
+    <div class="col-md-4 text-end">
+      <button class="btn btn-primary" (click)="createTeam()">
+        <i class="bi bi-plus-lg"></i> Agregar Equipo
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <!-- Sin resultados -->
+  <div *ngIf="!loading && teams.length === 0" class="alert alert-info">
+    <i class="bi bi-info-circle"></i> No hay equipos registrados.
+    <button class="btn btn-sm btn-primary ms-2" (click)="createTeam()">
+      Agregar equipo
+    </button>
+  </div>
+
+  <!-- Tabla de equipos -->
+  <div *ngIf="!loading && teams.length > 0" class="table-responsive">
+    <table class="table table-hover shadow-sm">
+      <thead class="table-dark">
+        <tr>
+          <th>Nombre</th>
+          <th>Ciudad</th>
+          <th>Entrenador</th>
+          <th>Director</th>
+          <th>Jugadores</th>
+          <th>Estado</th>
+          <th>Pago Inscripción</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let team of teams">
+          <td>
+            <strong>{{ team.name }}</strong>
+            <br>
+            <small class="text-muted">{{ team.abbreviation }}</small>
+          </td>
+          <td>{{ team.city || '-' }}</td>
+          <td>{{ team.coach || '-' }}</td>
+          <td>{{ team.manager || '-' }}</td>
+          <td>
+            <span class="badge bg-info">
+              <!--{{ team.players?.length || 0 }} jugadores-->
+            </span>
+          </td>
+          <td>
+            <span class="badge" [ngClass]="getStatusBadgeClass(team.status)">
+              {{ getStatusText(team.status) }}
+            </span>
+          </td>
+          <td>
+            <span class="badge" [ngClass]="team.inscriptionPaymentStatus === 'PAID' ? 'bg-success' : 'bg-warning'">
+              {{ team.inscriptionPaymentStatus }}
+            </span>
+          </td>
+          <td>
+            <div class="btn-group btn-group-sm" role="group">
+              <button
+                class="btn btn-outline-primary"
+                title="Ver detalles"
+                (click)="viewTeam(team.id)">
+                <i class="bi bi-eye"></i>
+              </button>
+              <button
+                class="btn btn-outline-warning"
+                title="Editar"
+                (click)="editTeam(team.id)">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button
+                class="btn btn-outline-danger"
+                title="Eliminar"
+                (click)="deleteTeam(team)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

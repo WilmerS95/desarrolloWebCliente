@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './auth/services/auth.service';
-import { CartService } from './services/cart.service';
-import { CartItem } from './shared/models/CartItem';
+// Cart functionality removed for sports app. If needed, recreate CartItem model and CartService.
 import Swal from 'sweetalert2';
 
 @Component({
@@ -21,13 +20,10 @@ export class AppComponent {
 
   constructor(
       private router: Router,
-      private authService: AuthService,
-      private cartService: CartService
+      private authService: AuthService
   ) {}
 
   ngOnInit() {
-    this.cartService.cartCount$.subscribe(count => { this.cartCount = count });
-    //this.updateCart();
     if (this.isLoggedIn()) {
       this.currentUser = {
         name: this.authService.getUserName(),
@@ -41,14 +37,7 @@ export class AppComponent {
     document.addEventListener('click', this.handleClickOutside.bind(this));
   }
 
-  addToCart(item: CartItem) {
-    this.cartService.addItem(item);
-    this.updateCart();
-  }
-
-  updateCart() {
-    this.cartCount = this.cartService.getCount();
-  }
+  // cart methods removed. Use Team/Player booking flows instead of cart.
 
   get isAdmin(): boolean {
     return this.currentUser?.role === 'ADMIN';
@@ -175,7 +164,7 @@ export class AppComponent {
   }
 
   goToParameters() {
-    this.router.navigate(['/business-parameters']);
+    this.router.navigate(['/tournament-parameters']);
   }
 
   logout() {

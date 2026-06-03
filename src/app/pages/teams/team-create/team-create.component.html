@@ -1,0 +1,122 @@
+<div class="container-fluid p-4">
+  <div class="row mb-4">
+    <div class="col-md-8">
+      <h2>
+        <i class="bi bi-people"></i>
+        {{ isEditMode ? 'Editar Equipo' : 'Crear Equipo' }}
+      </h2>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+            <!-- Nombre y Abreviatura -->
+            <div class="row">
+              <div class="col-md-7 mb-3">
+                <label class="form-label">Nombre del Equipo <span class="text-danger">*</span></label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="form.get('name')?.invalid && form.get('name')?.touched"
+                  formControlName="name"
+                  placeholder="Ej: Deportivo Universitario">
+                <div class="invalid-feedback" *ngIf="form.get('name')?.invalid && form.get('name')?.touched">
+                  Se requiere un nombre válido (mínimo 3 caracteres)
+                </div>
+              </div>
+              <div class="col-md-5 mb-3">
+                <label class="form-label">Abreviatura <span class="text-danger">*</span></label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="form.get('abbreviation')?.invalid && form.get('abbreviation')?.touched"
+                  formControlName="abbreviation"
+                  placeholder="Ej: DU"
+                  maxlength="5">
+                <div class="invalid-feedback" *ngIf="form.get('abbreviation')?.invalid && form.get('abbreviation')?.touched">
+                  Se requiere abreviatura (máx 5 caracteres)
+                </div>
+              </div>
+            </div>
+
+            <!-- Ciudad y Entrenador -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Ciudad <span class="text-danger">*</span></label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="form.get('city')?.invalid && form.get('city')?.touched"
+                  formControlName="city"
+                  placeholder="Ej: Quito">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Entrenador <span class="text-danger">*</span></label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="form.get('coach')?.invalid && form.get('coach')?.touched"
+                  formControlName="coach"
+                  placeholder="Ej: Juan Pérez">
+              </div>
+            </div>
+
+            <!-- Director -->
+            <div class="mb-3">
+              <label class="form-label">Director/Delegado</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="manager"
+                placeholder="Ej: Carlos García">
+            </div>
+
+            <!-- Estado -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Estado del Equipo</label>
+                <select class="form-select" formControlName="status">
+                  <option value="REGISTERED">Registrado</option>
+                  <option value="VERIFIED">Verificado</option>
+                  <option value="SUSPENDED">Suspendido</option>
+                  <option value="ELIMINATED">Eliminado</option>
+                </select>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Pago de Inscripción</label>
+                <select class="form-select" formControlName="inscriptionPaymentStatus">
+                  <option value="PENDING">Pendiente</option>
+                  <option value="PAID">Pagado</option>
+                  <option value="OVERDUE">Vencido</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Botones -->
+            <div class="row mt-4">
+              <div class="col-md-12">
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  [disabled]="form.invalid || loading">
+                  <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+                  {{ isEditMode ? 'Actualizar' : 'Crear' }} Equipo
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-secondary ms-2"
+                  (click)="goBack()"
+                  [disabled]="loading">
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

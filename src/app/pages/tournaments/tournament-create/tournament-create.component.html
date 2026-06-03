@@ -1,0 +1,144 @@
+<div class="container-fluid p-4">
+  <div class="row mb-4">
+    <div class="col-md-8">
+      <h2>
+        <i class="bi bi-trophy"></i>
+        {{ isEditMode ? 'Editar Torneo' : 'Crear Torneo' }}
+      </h2>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+            <!-- Nombre y Tipo -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Nombre del Torneo <span class="text-danger">*</span></label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="form.get('name')?.invalid && form.get('name')?.touched"
+                  formControlName="name"
+                  placeholder="Ej: Liga Provincial 2026">
+                <div class="invalid-feedback" *ngIf="form.get('name')?.invalid && form.get('name')?.touched">
+                  Se requiere un nombre válido (mínimo 3 caracteres)
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Tipo de Torneo <span class="text-danger">*</span></label>
+                <select class="form-select" formControlName="type">
+                  <option *ngFor="let type of types" [value]="type.value">{{ type.label }}</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Descripción -->
+            <div class="mb-3">
+              <label class="form-label">Descripción</label>
+              <textarea
+                class="form-control"
+                formControlName="description"
+                rows="2"
+                placeholder="Detalles del torneo..."></textarea>
+            </div>
+
+            <!-- Ubicación y Estado -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Ubicación</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="location"
+                  placeholder="Ej: Cancha municipal">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Estado</label>
+                <select class="form-select" formControlName="status">
+                  <option *ngFor="let status of statuses" [value]="status.value">{{ status.label }}</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Fechas -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Fecha Inicio <span class="text-danger">*</span></label>
+                <input
+                  type="date"
+                  class="form-control"
+                  [class.is-invalid]="form.get('startDate')?.invalid && form.get('startDate')?.touched"
+                  formControlName="startDate">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Fecha Fin <span class="text-danger">*</span></label>
+                <input
+                  type="date"
+                  class="form-control"
+                  [class.is-invalid]="form.get('endDate')?.invalid && form.get('endDate')?.touched"
+                  formControlName="endDate">
+              </div>
+            </div>
+
+            <!-- Configuración -->
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Máx. Equipos <span class="text-danger">*</span></label>
+                <input
+                  type="number"
+                  class="form-control"
+                  [class.is-invalid]="form.get('maxTeams')?.invalid && form.get('maxTeams')?.touched"
+                  formControlName="maxTeams"
+                  min="2">
+                <small class="form-text text-muted">Total de equipos en el torneo</small>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Equipos/Grupo <span class="text-danger">*</span></label>
+                <input
+                  type="number"
+                  class="form-control"
+                  [class.is-invalid]="form.get('teamsPerGroup')?.invalid && form.get('teamsPerGroup')?.touched"
+                  formControlName="teamsPerGroup"
+                  min="2">
+                <small class="form-text text-muted">Equipos por grupo fase inicial</small>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Avanzan a Eliminatoria <span class="text-danger">*</span></label>
+                <input
+                  type="number"
+                  class="form-control"
+                  [class.is-invalid]="form.get('advanceTeams')?.invalid && form.get('advanceTeams')?.touched"
+                  formControlName="advanceTeams"
+                  min="1">
+                <small class="form-text text-muted">Equipos que pasan a eliminatoria</small>
+              </div>
+            </div>
+
+            <!-- Botones -->
+            <div class="row mt-4">
+              <div class="col-md-12">
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  [disabled]="form.invalid || loading">
+                  <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+                  {{ isEditMode ? 'Actualizar' : 'Crear' }} Torneo
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-secondary ms-2"
+                  (click)="goBack()"
+                  [disabled]="loading">
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

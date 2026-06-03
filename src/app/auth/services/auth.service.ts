@@ -11,7 +11,7 @@ export class AuthService {
 
   private tokenTimer: any;
 
-  private readonly _baseUrl = new BehaviorSubject<string>('http://158.23.57.56:8080');
+  private readonly _baseUrl = new BehaviorSubject<string>('http://localhost:8080');
   public readonly baseUrl$: Observable<string> = this._baseUrl.asObservable();
 
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasValidToken());

@@ -1,0 +1,103 @@
+<div class="container-fluid p-4">
+  <div class="row mb-4">
+    <div class="col-md-8">
+      <h2><i class="bi bi-trophy"></i> Campeonatos</h2>
+    </div>
+    <div class="col-md-4 text-end">
+      <button class="btn btn-primary" (click)="createTournament()">
+        <i class="bi bi-plus-lg"></i> Crear Torneo
+      </button>
+    </div>
+  </div>
+
+  <!-- Búsqueda -->
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Buscar torneo..."
+        [(ngModel)]="searchTerm">
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <!-- Sin resultados -->
+  <div *ngIf="!loading && filteredTournaments.length === 0" class="alert alert-info">
+    <i class="bi bi-info-circle"></i> No hay campeonatos disponibles.
+    <button class="btn btn-sm btn-primary ms-2" (click)="createTournament()">
+      Crear torneo
+    </button>
+  </div>
+
+  <!-- Tabla de torneos -->
+  <div *ngIf="!loading && filteredTournaments.length > 0" class="table-responsive">
+    <table class="table table-hover shadow-sm">
+      <thead class="table-dark">
+        <tr>
+          <th>Nombre</th>
+          <th>Tipo</th>
+          <th>Estado</th>
+          <th>Equipos</th>
+          <th>Fechas</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let tournament of filteredTournaments">
+          <td>
+            <strong>{{ tournament.name }}</strong>
+            <br>
+            <small class="text-muted">{{ tournament.description }}</small>
+          </td>
+          <td>{{ getCategoryDisplay(tournament.type) }}</td>
+          <td>
+            <span class="badge" [ngClass]="getStatusBadgeClass(tournament.status)">
+              {{ getStatusText(tournament.status) }}
+            </span>
+          </td>
+          <td>
+            <i class="bi bi-people"></i> {{ tournament.maxTeams }}
+            <br>
+            <small class="text-muted">{{ tournament.teamsPerGroup }}/grupo</small>
+          </td>
+          <td>
+            <small>
+              {{ tournament.startDate | date:'dd/MM/yyyy' }}
+              -
+              {{ tournament.endDate | date:'dd/MM/yyyy' }}
+            </small>
+          </td>
+          <td>
+            <div class="btn-group btn-group-sm" role="group">
+              <button
+                class="btn btn-outline-primary"
+                title="Ver detalles"
+                (click)="viewTournament(tournament)">
+                <i class="bi bi-eye"></i>
+              </button>
+              <button
+                class="btn btn-outline-warning"
+                title="Editar"
+                (click)="editTournament(tournament)">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button
+                class="btn btn-outline-danger"
+                title="Eliminar"
+                (click)="deleteTournament(tournament)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

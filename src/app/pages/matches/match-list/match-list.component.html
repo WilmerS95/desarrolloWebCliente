@@ -1,0 +1,88 @@
+<div class="container-fluid p-4">
+  <div class="row mb-4">
+    <div class="col-md-8">
+      <h2>
+        <i class="bi bi-calendar-check"></i> Partidos &nbsp;
+        <button class="btn btn-sm btn-secondary" (click)="goBack()">
+          ← Volver
+        </button>
+      </h2>
+    </div>
+    <div class="col-md-4 text-end">
+      <button class="btn btn-primary" (click)="createMatch()">
+        <i class="bi bi-plus-lg"></i> Crear Partido
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <!-- Sin resultados -->
+  <div *ngIf="!loading && matches.length === 0" class="alert alert-info">
+    <i class="bi bi-info-circle"></i> No hay partidos programados.
+    <button class="btn btn-sm btn-primary ms-2" (click)="createMatch()">
+      Crear partido
+    </button>
+  </div>
+
+  <!-- Lista de partidos -->
+  <div *ngIf="!loading && matches.length > 0" class="row">
+    <div *ngFor="let match of matches" class="col-md-6 col-lg-4 mb-3">
+      <div class="card h-100 shadow-sm">
+        <div class="card-header" [ngClass]="getStatusBadgeClass(match.status)">
+          <small class="text-white">
+            <strong>{{ getStatusText(match.status) }}</strong>
+          </small>
+        </div>
+        <div class="card-body">
+          <div class="match-score mb-3">
+            <div class="row text-center">
+              <div class="col-4">
+                <p class="mb-0">{{ match.homeTeam?.name || 'Local' }}</p>
+                <h4 class="mb-0">{{ match.homeTeamGoals ?? '-' }}</h4>
+              </div>
+              <div class="col-4">
+                <p class="text-muted small">vs</p>
+              </div>
+              <div class="col-4">
+                <p class="mb-0">{{ match.awayTeam?.name || 'Visitante' }}</p>
+                <h4 class="mb-0">{{ match.awayTeamGoals ?? '-' }}</h4>
+              </div>
+            </div>
+          </div>
+
+          <hr>
+
+          <p class="card-text small mb-2">
+            <i class="bi bi-calendar"></i>
+            {{ match.matchDate | date:'dd/MM/yyyy HH:mm' }}
+          </p>
+          <p class="card-text small mb-3">
+            <i class="bi bi-geo-alt"></i>
+            {{ match.venue || 'No especificado' }}
+          </p>
+
+          <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-outline-primary" (click)="viewMatch(match.id)">
+              <i class="bi bi-eye"></i> Ver detalles
+            </button>
+            <button
+              *ngIf="match.status === 'FINISHED' || match.status === 'LIVE'"
+              class="btn btn-sm btn-outline-warning"
+              (click)="editResult(match.id)">
+              <i class="bi bi-pencil"></i> Editar resultado
+            </button>
+            <button class="btn btn-sm btn-outline-danger" (click)="deleteMatch(match)">
+              <i class="bi bi-trash"></i> Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

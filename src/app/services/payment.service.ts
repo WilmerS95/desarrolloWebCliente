@@ -97,6 +97,12 @@ export class PaymentService {
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
+  // En lugar de pagos de préstamos, ahora:
+  getInscriptionPayments(tournamentId: number): Observable<InscriptionPayment[]>
+  payInscription(paymentId: number): Observable<any>
+  getCardPayments(tournamentId: number): Observable<CardPayment[]>
+  payCard(cardPaymentId: number): Observable<any>
+
   reportPayment(request: PaymentRequestDTO): Observable<PaymentDTO> {
     return this.http.post<PaymentDTO>(
       `${this.apiUrl}/report`,

@@ -1,0 +1,97 @@
+<div class="container-fluid p-4" *ngIf="!loading">
+  <!-- Header -->
+  <div class="row mb-4">
+    <div class="col-md-8">
+      <h2 *ngIf="tournament">
+        <i class="bi bi-trophy"></i> {{ tournament.name }}
+      </h2>
+    </div>
+    <div class="col-md-4 text-end">
+      <button class="btn btn-outline-warning me-2" (click)="editTournament()" *ngIf="tournament">
+        <i class="bi bi-pencil"></i> Editar
+      </button>
+      <button class="btn btn-outline-secondary" (click)="goBack()">
+        ← Volver
+      </button>
+    </div>
+  </div>
+
+  <!-- Información del Torneo -->
+  <div class="row mb-4" *ngIf="tournament">
+    <div class="col-md-12">
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <p><strong>Descripción:</strong> {{ tournament.description }}</p>
+              <p><strong>Tipo:</strong> {{ getCategoryDisplay(tournament.type) }}</p>
+              <p><strong>Ubicación:</strong> {{ tournament.location || '-' }}</p>
+              <p><strong>Estado:</strong>
+                <span class="badge" [ngClass]="getStatusBadgeClass(tournament.status)">
+                  {{ getStatusText(tournament.status) }}
+                </span>
+              </p>
+            </div>
+            <div class="col-md-6">
+              <p><strong>Fecha Inicio:</strong> {{ tournament.startDate | date:'dd/MM/yyyy' }}</p>
+              <p><strong>Fecha Fin:</strong> {{ tournament.endDate | date:'dd/MM/yyyy' }}</p>
+              <p><strong>Máximo de Equipos:</strong> {{ tournament.maxTeams }}</p>
+              <p><strong>Equipos por Grupo:</strong> {{ tournament.teamsPerGroup }}</p>
+              <p><strong>Equipos que Avanzan:</strong> {{ tournament.advanceTeams }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menú de Opciones -->
+  <div class="row" *ngIf="tournament">
+    <div class="col-md-6 col-lg-3 mb-3">
+      <div class="card h-100 shadow-sm cursor-pointer" (click)="goToTeams()" style="cursor: pointer;">
+        <div class="card-body text-center">
+          <i class="bi bi-people" style="font-size: 2.5rem; color: #0d6efd;"></i>
+          <h5 class="card-title mt-3">Equipos</h5>
+          <p class="card-text text-muted">Gestionar equipos del torneo</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-3">
+      <div class="card h-100 shadow-sm cursor-pointer" (click)="goToMatches()" style="cursor: pointer;">
+        <div class="card-body text-center">
+          <i class="bi bi-calendar-check" style="font-size: 2.5rem; color: #198754;"></i>
+          <h5 class="card-title mt-3">Partidos</h5>
+          <p class="card-text text-muted">Ver y gestionar partidos</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-3">
+      <div class="card h-100 shadow-sm cursor-pointer" (click)="goToStandings()" style="cursor: pointer;">
+        <div class="card-body text-center">
+          <i class="bi bi-table" style="font-size: 2.5rem; color: #fd7e14;"></i>
+          <h5 class="card-title mt-3">Tabla</h5>
+          <p class="card-text text-muted">Tabla de posiciones</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-3">
+      <div class="card h-100 shadow-sm cursor-pointer" (click)="goToStatistics()" style="cursor: pointer;">
+        <div class="card-body text-center">
+          <i class="bi bi-bar-chart" style="font-size: 2.5rem; color: #dc3545;"></i>
+          <h5 class="card-title mt-3">Estadísticas</h5>
+          <p class="card-text text-muted">Goleadores y porteros</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading -->
+<div *ngIf="loading" class="text-center py-5">
+  <div class="spinner-border" role="status">
+    <span class="visually-hidden">Cargando...</span>
+  </div>
+</div>
